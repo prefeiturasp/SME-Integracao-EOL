@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{D183A3D8-5FD8-494B-B014-37F57B35E655}") = "ImportacaoSMESP", "ImportacaoSMESP.dtproj", "{47959BD8-96C2-4DC1-A757-9D21D479EDA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentos", "Documentos", "{50929FD5-4429-41B5-B578-72115EEB4F65}"
+	ProjectSection(SolutionItems) = preProject
+		Procedimentos Execucao SSIS.doc = Procedimentos Execucao SSIS.doc
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7F06744A-FBF8-468F-8F46-61F6790AD189}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47959BD8-96C2-4DC1-A757-9D21D479EDA1}.Development|Default.ActiveCfg = Development
+		{47959BD8-96C2-4DC1-A757-9D21D479EDA1}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://srv15:8080/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ImportacaoSMESP.dtproj
+		SccLocalPath1 = .
+	EndGlobalSection
+EndGlobal
