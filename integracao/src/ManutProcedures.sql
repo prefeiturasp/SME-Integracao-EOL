@@ -4145,7 +4145,7 @@ BEGIN
 	MERGE INTO SSO_SYS_Usuario _target
 	USING (SELECT cd_registro_funcional AS usu_login, '.' AS usu_email, --conforme solicitado pela carla em 27/06/2017, precisa colocar algo ao invés de null no email senao da erro ao reenviar senha de usuarios bloqueados
 	              pwd AS usu_senha, dcc.pes_id, @ent_id_smesp AS ent_id, 5 AS usu_situacao,
-	              3 AS usu_criptografia, 1 AS usu_integridade, isnull(usu_id, newid()) usu_id
+	              1 AS usu_criptografia, 1 AS usu_integridade, isnull(usu_id, newid()) usu_id
              FROM (select cd_registro_funcional, pwd, pes_id
                      from tmp_DiarioClasse_cargos
                     group by cd_registro_funcional, pwd, pes_id) dcc
@@ -6175,7 +6175,7 @@ BEGIN
       INTO #usuario_table
     SELECT DISTINCT tmp.cd_registro_funcional AS usu_login, tmp.senha AS usu_senha,
            ISNULL(tmp.pes_id, p.pes_id) AS pes_id, @ent_id, 5 AS usu_situacao,
-           3 AS usu_criptografia, GETDATE() AS usu_dataCriacao, GETDATE() AS usu_dataAlteracao
+           1 as usu_criptografia, GETDATE() AS usu_dataCriacao, GETDATE() AS usu_dataAlteracao
       FROM dbo.tmp_DiarioSupervisor_servidor tmp
            LEFT JOIN #pessoa_inserir p ON tmp.cd_cpf_pessoa = p.pes_cpf
            LEFT JOIN (SELECT u.*, ROW_NUMBER() OVER(PARTITION BY u.usu_login ORDER BY u.usu_situacao, u.usu_dataCriacao) as linha
@@ -9974,11 +9974,11 @@ BEGIN
              from (SELECT usu_login, usu_senha, pes_id, ent_id, usu_situacao, usu_criptografia,
                           GETDATE() usu_dataCriacao, GETDATE() usu_dataAlteracao
                      FROM (SELECT DISTINCT tmp.rf AS usu_login, tmp.senha AS usu_senha, tmp.pes_id,
-                                  @ent_id ent_id, 5 usu_situacao, 3 usu_criptografia
+                                  @ent_id ent_id, 5 usu_situacao, 1 usu_criptografia
                              FROM tmp_DiarioClasse_cadastro_professor tmp
                            UNION
                            SELECT DISTINCT tmp.cd_registro_funcional AS usu_login, tmp.senha AS usu_senha,
-                                  tmp.pes_id, @ent_id ent_id, 5 usu_situacao, 3 usu_criptografia
+                                  tmp.pes_id, @ent_id ent_id, 5 usu_situacao, 1 usu_criptografia
                              FROM tmp_DiarioSupervisor_servidor tmp
 							WHERE tmp.cd_cpf_pessoa is not null --adicionada em 02/02/2017 pois não foi criada pessoa por causa do cpf nulo, o que fazia com que o merge ficasse criando usuarios para esta pessoa desnecessariamente
 						   ) usuario
@@ -10017,11 +10017,11 @@ BEGIN
 				 FROM (SELECT usu_login, usu_senha, pes_id, ent_id, usu_situacao, usu_criptografia,
 							  GETDATE() usu_dataCriacao, GETDATE() usu_dataAlteracao
 						 FROM (SELECT DISTINCT tmp.rf AS usu_login, tmp.senha AS usu_senha, tmp.pes_id,
-									  @ent_id ent_id, 5 usu_situacao, 3 usu_criptografia
+									  @ent_id ent_id, 5 usu_situacao, 1 usu_criptografia
 								 FROM tmp_DiarioClasse_cadastro_professor tmp
 							   UNION
 							   SELECT DISTINCT tmp.cd_registro_funcional AS usu_login, tmp.senha AS usu_senha,
-									  tmp.pes_id, @ent_id ent_id, 5 usu_situacao, 3 usu_criptografia
+									  tmp.pes_id, @ent_id ent_id, 5 usu_situacao, 1 usu_criptografia
 								 FROM tmp_DiarioSupervisor_servidor tmp) usuario
 						GROUP BY usu_login, usu_senha, pes_id, ent_id, usu_situacao, usu_criptografia) dados
 					  INNER JOIN CoreSSO..SYS_Usuario usu
@@ -15925,7 +15925,7 @@ BEGIN
     insert into #USER
     SELECT DISTINCT tmp.pes_id AS pes_id, mtr.senha AS senha,
            'RA' + CAST(tmp.alu_codigo AS VARCHAR(10)) AS usu_login, 1 as usu_situacao,
-           1 as usu_integridade, @ent_id AS ent_id, 3 as usu_criptografia
+           1 as usu_integridade, @ent_id AS ent_id, 1 as usu_criptografia
       FROM IMP_alunos_pais tmp INNER JOIN tmp_DiarioClasse_aluno mtr
            ON tmp.alu_codigo = mtr.cl_alu_codigo
      where tmp.alu_codigo in (select alc_matricula from GE_ACA_AlunoCurriculo with (nolock)
@@ -16089,7 +16089,7 @@ BEGIN
     MERGE INTO SSO_SYS_Usuario AS target
     USING (SELECT DISTINCT tmp.pes_idFiliacaoRsp AS pes_id, mtr.senha_resp AS senha,
                   'RESP' + CAST(tmp.alu_codigo AS VARCHAR(10)) AS usu_login, 1 as usu_situacao,
-                  1 as usu_integridade, @ent_id AS ent_id, 3 as usu_criptografia
+                  1 as usu_integridade, @ent_id AS ent_id, 1 as usu_criptografia
             FROM IMP_alunos_pais tmp INNER JOIN tmp_DiarioClasse_aluno mtr
               ON tmp.alu_codigo = mtr.cl_alu_codigo
            WHERE tmp.pes_idFiliacaoRsp IS NOT NULL
