@@ -18512,7 +18512,7 @@ BEGIN TRAN
 					5 ,
 					1 ,
 					@ent_id ,
-					3
+					1
 			FROM    #professor_table tmp
 					INNER JOIN TMP_PROFESSOR prof ON ( prof.rf COLLATE Latin1_General_CI_AI = tmp.rf COLLATE Latin1_General_CI_AI )
 			WHERE   tmp.pes_id IS NOT NULL 
