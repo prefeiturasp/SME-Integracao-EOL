@@ -11403,6 +11403,7 @@ BEGIN
 						 from CoreSSO..SYS_UsuarioGrupoUA ugu 
 						where ugu.usu_id = usg.usu_id and ugu.gru_id = gru.gru_id)
 
+  /* O novo SGP identifica email null ou '' (vazio) para atualizar o cadastro
 	UPDATE CoreSSO..SYS_Usuario
 	   SET usu_email = 'RF' + usu_login + '@emailfalso'
 	  FROM CoreSSO..SYS_Usuario USU WITH(NOLOCK)
@@ -11413,6 +11414,7 @@ BEGIN
 	UPDATE PackageTaskLog
        SET EndDateTime = getdate()
      WHERE PackageLogID = @PackageLogID AND SourceID = @SourceID
+  */
 
 END
 GO
