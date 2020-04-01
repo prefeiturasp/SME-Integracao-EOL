@@ -5634,10 +5634,10 @@ BEGIN
          VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate())
     
     -- MTR_MatriculaTurma
-    MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
+     MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
     USING (select alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
                   mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada
-                 ,mtu.mtu_dataMatricula, mtu.mtu_dataSaida -- Add 07-06/16
+                 ,mtu.mtu_dataMatricula, mtu.mtu_dataSaida, crp.tcp_id -- Add 07-06/16
              from GestaoAvaliacao_SGP..ACA_Aluno alu
                   inner join GestaoPedagogica..MTR_MatriculaTurma mtu with (nolock)
                   on alu.alu_id = mtu.alu_id
@@ -5647,14 +5647,17 @@ BEGIN
                    on mtu.cur_id = crp.cur_id
                   and mtu.crr_id = crp.crr_id
                   and mtu.crp_id = crp.crp_id
+				  inner join GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo tpcp
+				  on crp.tcp_id = tpcp.tcp_id
             where alu.alu_situacao = 1
               and mtu.mtu_situacao <> 3 -- Alterado de 1 para 3 - 07-06/16
               and tur.tur_situacao <> 3
               and crp.crp_situacao <> 3
+			  and tpcp.tcp_situacao <> 3
             group by alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
-                  mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada,mtu.mtu_dataMatricula, mtu.mtu_dataSaida) Origem
+                  mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada,mtu.mtu_dataMatricula, mtu.mtu_dataSaida, crp.tcp_id) Origem
      ON Destino.alu_id = Origem.alu_id
-    AND Destino.mtu_id = Origem.mtu_id
+    AND Destino.mtu_id = Origem.mtu_id	
     WHEN MATCHED
          AND ((Destino.mtu_numeroChamada <> Origem.mtu_numeroChamada)
                OR
@@ -5667,10 +5670,10 @@ BEGIN
                     mtu_dataSaida	  = Origem.mtu_dataSaida	  --Add 07-06/16
     WHEN NOT MATCHED THEN
          INSERT (alu_id, mtu_id, esc_id, tur_id, cur_id, crr_id, crp_id,
-                 mtu_situacao, mtu_dataCriacao, mtu_dataAlteracao, mtu_numeroChamada,  mtu_dataMatricula, mtu_dataSaida)
+                 mtu_situacao, mtu_dataCriacao, mtu_dataAlteracao, mtu_numeroChamada,  mtu_dataMatricula, mtu_dataSaida, tcp_id)
          VALUES (Origem.alu_id, Origem.mtu_id, Origem.esc_id, Origem.tur_id, Origem.cur_id,
                  Origem.crr_id, Origem.crp_id, Origem.mtu_situacao,
-                 Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida)
+                 Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.mtu_situacao <> 3 THEN
          UPDATE SET mtu_situacao = 3,
                     mtu_dataAlteracao = GETDATE();
