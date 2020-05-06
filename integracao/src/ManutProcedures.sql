@@ -5408,6 +5408,7 @@ BEGIN
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
+    AND Destino.tcp_id = Origem.tcp_id
     WHEN MATCHED
          AND ((Destino.crp_descricao COLLATE DATABASE_DEFAULT <> Origem.crp_descricao COLLATE DATABASE_DEFAULT)
                OR
@@ -5539,30 +5540,36 @@ BEGIN
     -- TUR_TurmaCurriculo
     MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaCurriculo Destino
     USING (select tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
-                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao
+                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id
              from GestaoAvaliacao_SGP..TUR_Turma tur
-                  inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
+              inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
                   on tur.tur_id = tcr.tur_id
-                  inner join GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
-                   on tcr.cur_id = crp.cur_id
-                  and tcr.crr_id = crp.crr_id
-                  and tcr.crp_id = crp.crp_id
+              inner join GestaoPedagogica..ACA_CurriculoPeriodo crp1
+                    ON tcr.cur_id = crp1.cur_id
+                      and tcr.crr_id = crp1.crr_id
+                      and tcr.crp_id = crp1.crp_id
+              inner join GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
+                    on tcr.cur_id = crp.cur_id
+                      and tcr.crr_id = crp.crr_id
+                      and tcr.crp_id = crp.crp_id
+                      and crp1.tcp_id = crp.tcp_id
             where tur.tur_situacao <> 3
               and tcr.tcr_situacao <> 3
               and crp.crp_situacao <> 3
             group by tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
-                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao) Origem
+                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id) Origem
      ON Destino.tur_id = Origem.tur_id
     AND Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
+    AND Destino.tcp_id = Origem.tcp_id
     WHEN MATCHED AND (Destino.tcr_situacao <> Origem.tcr_situacao) THEN
          UPDATE SET tcr_situacao = Origem.tcr_situacao,
                     tcr_dataAlteracao = Origem.tcr_dataAlteracao
     WHEN NOT MATCHED THEN
-         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_dataCriacao, tcr_dataAlteracao)
+         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_dataCriacao, tcr_dataAlteracao, tcp_id)
          VALUES (Origem.tur_id, Origem.cur_id, Origem.crr_id, Origem.crp_id, Origem.tcr_situacao,
-                 Origem.tcr_dataCriacao, Origem.tcr_dataAlteracao)
+                 Origem.tcr_dataCriacao, Origem.tcr_dataAlteracao, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.tcr_situacao <> 3 THEN
          UPDATE SET tcr_situacao = 3,
                     tcr_dataAlteracao = GETDATE();
@@ -12523,11 +12530,12 @@ BEGIN
       crr_id int NULL,
       crp_id int NULL,
       tcr_prioridade int NULL,
-      tcr_situacao tinyint NULL)    
+      tcr_situacao tinyint NULL,
+      tcp_id int NULL)    
     
 	--turmas regulares com fl_edFisica = 0
-    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
-    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao
+    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, tcp_id)
+    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao, crp.tcp_id
       FROM tmp_DiarioClasse_turma tmp
            INNER JOIN DEPARA_TURMA tur
            ON (tur.tur_codigo = CONVERT(VARCHAR(10), tmp.cd_turma_escola))
@@ -12566,8 +12574,8 @@ BEGIN
        and dep.fl_edFisica = 0
     
 	--turmas regulares com fl_edFisica = 1
-    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
-    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao
+    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, tcp_id)
+    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao, crp.tcp_id
       FROM tmp_DiarioClasse_turma tmp
            INNER JOIN DEPARA_TURMA tur
            ON (tur.tur_codigo = CONVERT(VARCHAR(10), tmp.cd_turma_escola))
@@ -12605,8 +12613,8 @@ BEGIN
        and dep.fl_edFisica = 1
 
 	 --turmas de RP com fl_edFisica = 0
-    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
-    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao
+    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, crp.tcp_id)
+    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao, crp.tcp_id
       FROM tmp_DiarioClasse_turma tmp
            INNER JOIN #tmp_turma_programa trp
            ON tmp.cd_turma_escola = trp.cd_turma_programa
@@ -12649,8 +12657,8 @@ BEGIN
        and DEPARA_CURSO_GRADES.fl_edFisica = 0
     
 	 --turmas de RP com fl_edFisica = 1
-    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
-    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao
+    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, crp.tcp_id)
+    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao, crp.tcp_id
       FROM tmp_DiarioClasse_turma tmp
            INNER JOIN #tmp_turma_programa trp
            ON tmp.cd_turma_escola = trp.cd_turma_programa
@@ -12691,8 +12699,8 @@ BEGIN
 			)
        and DEPARA_CURSO_GRADES.fl_edFisica = 1
     
-    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
-    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao
+    INSERT INTO #tmp_TurmaCurriculo (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, crp.tcp_id)
+    SELECT tur.tur_id, cur.cur_id, crr.crr_id, crp.crp_id, 1 AS tcr_prioridade, 1 AS tcr_situacao, crp.tcp_id
       FROM tmp_DiarioClasse_turma tmp
            INNER JOIN #tmp_turma_edfisica edf
            ON tmp.cd_turma_escola = edf.cd_turma_edfisica
@@ -12730,9 +12738,9 @@ BEGIN
        AND DEPARA_CURSO_GRADES.fl_edFisica = 1
     
     MERGE INTO GE_TUR_TurmaCurriculo _target
-    USING (select tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_prioridade
+    USING (select tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_prioridade, tcp_id
 			 from #tmp_TurmaCurriculo 
-			group by tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_prioridade) AS _source
+			group by tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_prioridade, tcp_id) AS _source
      ON _source.tur_id = _target.tur_id
     AND _source.cur_id = _target.cur_id
     AND _source.crr_id = _target.crr_id
@@ -12740,9 +12748,9 @@ BEGIN
     WHEN MATCHED AND _target.tcr_situacao <> 1 THEN
          UPDATE SET tcr_situacao = 1, tcr_dataAlteracao = GETDATE()
     WHEN NOT MATCHED THEN
-         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
+         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, tcp_id)
          VALUES (_source.tur_id, _source.cur_id, _source.crr_id, _source.crp_id,
-                 _source.tcr_prioridade, _source.tcr_situacao);
+                 _source.tcr_prioridade, _source.tcr_situacao, _source.tcp_id);
   
 	--AEE
     update tur 
