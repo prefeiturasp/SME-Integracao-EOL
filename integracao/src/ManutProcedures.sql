@@ -5894,7 +5894,7 @@ BEGIN
     COMMIT
 
     -- Cadastramento de usuários
-    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER
+    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER, @gru_idDiretor UNIQUEIDENTIFIER, @gru_idCoordenador UNIQUEIDENTIFIER
     DECLARE @TipoUAD table (tua_id UNIQUEIDENTIFIER)
     
 	INSERT INTO @TipoUAD
@@ -5908,10 +5908,16 @@ BEGIN
       uad_id UNIQUEIDENTIFIER)
     
     -- ID do sistema
-    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'
+    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'--204
 
 	SELECT @gru_idProfessor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
      WHERE gru.nomeUsadoIntegracao = 'Professor' and gru.sis_id = @sis_id
+
+	SELECT @gru_idDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Diretor Escolar' and gru.sis_id = @sis_id
+
+	SELECT @gru_idCoordenador = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Coordenador Pedagógico' and gru.sis_id = @sis_id
     
     IF @gru_idProfessor IS NOT NULL
     BEGIN
@@ -5977,7 +5983,35 @@ BEGIN
                                  group by prf.rf, gc.cd_escola) prof
                          where prof.rf = ds.cd_registro_funcional
                            and prof.cd_escola = cb.lotacao)
-                 group by ds.cd_registro_funcional, cb.lotacao) serv
+                  group by ds.cd_registro_funcional, cb.lotacao
+                UNION ALL
+		-- Servidores que possuem cargo base de diretor ou coordenador pedagógio e não possuem cargo sobreposto
+                    SELECT DISTINCT
+                        crg.cd_registro_funcional rf ,
+                        CASE crg.cd_cargo 
+                            WHEN 3360 THEN @gru_idDiretor 
+                            WHEN 3379 THEN @gru_idCoordenador
+                        END AS gru_id ,
+                        CRG.lotacao
+                    FROM tmp_cargobase_mstech crg WITH (NOLOCK)
+                        LEFT JOIN tmp_cargosobreposto_mstech cgs WITH (NOLOCK) ON crg.cd_cargo_base_servidor = cgs.cd_cargo_base_servidor
+                    WHERE cgs.cd_cargo IS NULL
+                        AND crg.cd_cargo IN (3360, 3379) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+				    GROUP BY crg.cd_registro_funcional, crg.cd_cargo, CRG.lotacao
+                UNION ALL
+		-- Servidores que passaram a ser coordenadores pedagógicos ou diretores através do cargo sobreposto
+                    SELECT DISTINCT
+                        crg.cd_registro_funcional rf ,
+                        CASE crs.cd_cargo
+                            WHEN 3360 THEN @gru_idDiretor 
+                            WHEN 3379 THEN @gru_idCoordenador
+                        END AS gru_id ,
+                        CRS.cd_unidade_local_servico
+                    FROM tmp_cargosobreposto_mstech crs WITH (NOLOCK)
+                        INNER JOIN tmp_cargobase_mstech crg WITH (NOLOCK) ON crs.cd_cargo_base_servidor = crg.cd_cargo_base_servidor
+                        AND crg.cd_cargo IN (3360, 3379) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+				    GROUP BY crg.cd_registro_funcional, crs.cd_cargo, crs.cd_unidade_local_servico
+                 ) serv
                INNER JOIN CoreSSO..SYS_Usuario usu WITH (NOLOCK)
                ON serv.rf = usu.usu_login
                INNER JOIN CoreSSO..SYS_UnidadeAdministrativa uad WITH (NOLOCK)
@@ -5994,18 +6028,18 @@ BEGIN
                       ON tmp.usu_id = usu.usu_id
                 GROUP BY usu.usu_id, usu.usu_login, tmp.gru_id, tmp.uad_id) AS _source
          ON  _source.usu_login = _target.ssi_login
-        AND _source.gru_id = _target.gru_id
-        AND _source.uad_id = _target.uad_id
-        AND _source.usu_id = _target.usu_id
+            AND _source.gru_id = _target.gru_id
+            AND _source.uad_id = _target.uad_id
+            AND _source.usu_id = _target.usu_id
         WHEN NOT MATCHED THEN
     	     INSERT (usu_id, ssi_login, gru_id, uad_id, ssi_situacao)
 	         VALUES (_source.usu_id, _source.usu_login, _source.gru_id, _source.uad_id, 1)
         WHEN MATCHED AND (_target.ssi_situacao = 3
-                     AND _target.gru_id = @gru_idProfessor
+                     AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
                      AND _target.uad_id = _source.uad_id) THEN
              UPDATE SET ssi_situacao = 1,
                         ssi_dataAlteracao = GETDATE()
-        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id = @gru_idProfessor) THEN
+        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)) THEN
 	         UPDATE SET ssi_situacao = 3,
                         ssi_dataAlteracao = GETDATE();
         
@@ -6016,7 +6050,7 @@ BEGIN
                INNER JOIN SSIS_LoginImportado lo
                 ON ug.usu_id = lo.usu_id
                AND ug.gru_id = lo.gru_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
            AND lo.ssi_situacao = 3
         
         MERGE CoreSSO..SYS_UsuarioGrupo AS _target
@@ -6039,7 +6073,7 @@ BEGIN
                 ON ugu.usu_id = lo.usu_id
                AND ugu.gru_id = lo.gru_id
                AND ugu.uad_id = lo.uad_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
            AND lo.ssi_situacao = 3
         
         -- Atualiza a tabela SSIS_RFImportado para inativar os registros que foram deletados em UsuarioGrupo
@@ -12748,9 +12782,9 @@ BEGIN
     WHEN MATCHED AND _target.tcr_situacao <> 1 THEN
          UPDATE SET tcr_situacao = 1, tcr_dataAlteracao = GETDATE()
     WHEN NOT MATCHED THEN
-         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, tcp_id)
+         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
          VALUES (_source.tur_id, _source.cur_id, _source.crr_id, _source.crp_id,
-                 _source.tcr_prioridade, _source.tcr_situacao, _source.tcp_id);
+                 _source.tcr_prioridade, _source.tcr_situacao);
   
 	--AEE
     update tur 
