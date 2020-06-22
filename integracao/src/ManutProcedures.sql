@@ -5894,7 +5894,7 @@ BEGIN
     COMMIT
 
     -- Cadastramento de usuários
-    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER, @gru_idDiretor UNIQUEIDENTIFIER, @gru_idCoordenador UNIQUEIDENTIFIER
+    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER, @gru_idDiretor UNIQUEIDENTIFIER, @gru_idCoordenador UNIQUEIDENTIFIER, @gru_idAssistenteDiretor UNIQUEIDENTIFIER
     DECLARE @TipoUAD table (tua_id UNIQUEIDENTIFIER)
     
 	INSERT INTO @TipoUAD
@@ -5913,11 +5913,14 @@ BEGIN
 	SELECT @gru_idProfessor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
      WHERE gru.nomeUsadoIntegracao = 'Professor' and gru.sis_id = @sis_id
 
+	SELECT @gru_idCoordenador = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Coordenador Pedagógico' and gru.sis_id = @sis_id
+
 	SELECT @gru_idDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
      WHERE gru.nomeUsadoIntegracao = 'Diretor Escolar' and gru.sis_id = @sis_id
 
-	SELECT @gru_idCoordenador = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
-     WHERE gru.nomeUsadoIntegracao = 'Coordenador Pedagógico' and gru.sis_id = @sis_id
+	SELECT  @gru_idAssistenteDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao='Assistente de Diretor na UE' and gru.sis_id = @sis_id
     
     IF @gru_idProfessor IS NOT NULL
     BEGIN
@@ -5984,33 +5987,44 @@ BEGIN
                          where prof.rf = ds.cd_registro_funcional
                            and prof.cd_escola = cb.lotacao)
                   group by ds.cd_registro_funcional, cb.lotacao
-                UNION ALL
-		-- Servidores que possuem cargo base de diretor ou coordenador pedagógio e não possuem cargo sobreposto
-                    SELECT DISTINCT
-                        crg.cd_registro_funcional rf ,
-                        CASE crg.cd_cargo 
-                            WHEN 3360 THEN @gru_idDiretor 
-                            WHEN 3379 THEN @gru_idCoordenador
-                        END AS gru_id ,
-                        CRG.lotacao
-                    FROM tmp_cargobase_mstech crg WITH (NOLOCK)
-                        LEFT JOIN tmp_cargosobreposto_mstech cgs WITH (NOLOCK) ON crg.cd_cargo_base_servidor = cgs.cd_cargo_base_servidor
-                    WHERE cgs.cd_cargo IS NULL
-                        AND crg.cd_cargo IN (3360, 3379) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
-				    GROUP BY crg.cd_registro_funcional, crg.cd_cargo, CRG.lotacao
-                UNION ALL
-		-- Servidores que passaram a ser coordenadores pedagógicos ou diretores através do cargo sobreposto
-                    SELECT DISTINCT
-                        crg.cd_registro_funcional rf ,
-                        CASE crs.cd_cargo
-                            WHEN 3360 THEN @gru_idDiretor 
-                            WHEN 3379 THEN @gru_idCoordenador
-                        END AS gru_id ,
-                        CRS.cd_unidade_local_servico
-                    FROM tmp_cargosobreposto_mstech crs WITH (NOLOCK)
-                        INNER JOIN tmp_cargobase_mstech crg WITH (NOLOCK) ON crs.cd_cargo_base_servidor = crg.cd_cargo_base_servidor
-                        AND crg.cd_cargo IN (3360, 3379) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
-				    GROUP BY crg.cd_registro_funcional, crs.cd_cargo, crs.cd_unidade_local_servico
+				 
+				 UNION ALL
+
+				 --Servidores que possuem cargo base de diretor ou coordenador pedagógio e não possuem cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						CRG.lotacao,
+						CASE crg.cd_cargo 
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+						END AS gru_id
+					FROM tmp_cargobase_mstech crg WITH (NOLOCK)
+						LEFT JOIN tmp_cargosobreposto_mstech cgs WITH (NOLOCK) ON crg.cd_cargo_base_servidor = cgs.cd_cargo_base_servidor
+						inner join GestaoPedagogica..RHU_Cargo WITH (NOLOCK) on crg.cd_cargo = RHU_Cargo.crg_codigo and isnull(crg.cd_situacao_funcional,1) = RHU_Cargo.tvi_id
+					WHERE 
+						cgs.cd_cargo IS NULL
+						AND RHU_Cargo.crg_situacao <> 3
+						AND crg.cd_cargo IN (3360, 3379, 3085) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+						AND CRG.lotacao IS NOT NULL
+					GROUP BY crg.cd_registro_funcional, crg.cd_cargo, CRG.lotacao
+
+					UNION ALL
+
+				--Servidores que passaram a ser coordenadores pedagógicos ou diretores através do cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						crs.cd_unidade_local_servico lotacao,
+						CASE crs.cd_cargo
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+							END AS gru_id
+					FROM tmp_cargosobreposto_mstech crs WITH (NOLOCK)
+						INNER JOIN tmp_cargobase_mstech crg WITH (NOLOCK) ON crs.cd_cargo_base_servidor = crg.cd_cargo_base_servidor
+					WHERE 
+						crs.cd_cargo IN (3360, 3379, 3085) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+					GROUP BY crs.cd_cargo_base_servidor,crg.cd_registro_funcional, crs.cd_cargo, crs.cd_unidade_local_servico
                  ) serv
                INNER JOIN CoreSSO..SYS_Usuario usu WITH (NOLOCK)
                ON serv.rf = usu.usu_login
