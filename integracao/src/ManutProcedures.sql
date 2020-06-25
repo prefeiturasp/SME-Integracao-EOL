@@ -6049,11 +6049,11 @@ BEGIN
     	     INSERT (usu_id, ssi_login, gru_id, uad_id, ssi_situacao)
 	         VALUES (_source.usu_id, _source.usu_login, _source.gru_id, _source.uad_id, 1)
         WHEN MATCHED AND (_target.ssi_situacao = 3
-                     AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
+                     AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
                      AND _target.uad_id = _source.uad_id) THEN
              UPDATE SET ssi_situacao = 1,
                         ssi_dataAlteracao = GETDATE()
-        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)) THEN
+        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)) THEN
 	         UPDATE SET ssi_situacao = 3,
                         ssi_dataAlteracao = GETDATE();
         
@@ -6064,7 +6064,7 @@ BEGIN
                INNER JOIN SSIS_LoginImportado lo
                 ON ug.usu_id = lo.usu_id
                AND ug.gru_id = lo.gru_id
-         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
         
         MERGE CoreSSO..SYS_UsuarioGrupo AS _target
@@ -6087,7 +6087,7 @@ BEGIN
                 ON ugu.usu_id = lo.usu_id
                AND ugu.gru_id = lo.gru_id
                AND ugu.uad_id = lo.uad_id
-         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador)
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
         
         -- Atualiza a tabela SSIS_RFImportado para inativar os registros que foram deletados em UsuarioGrupo
