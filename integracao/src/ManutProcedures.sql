@@ -11840,6 +11840,7 @@ BEGIN
                                      FROM (select cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   null AS carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem
                                              from tmp_DiarioClasse_cargos
+											 inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = lotacao
                                             WHERE lotacao IS NOT NULL
                                             group by cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   dt_inicio, cd_situacao_funcional, pes_id, origem
@@ -11850,6 +11851,7 @@ BEGIN
                                                   inner join BD_PRODAM..v_grade_curricular grd
                                                    on dcc.cd_registro_funcional = grd.rf
                                                   and dcc.cd_cargo_base_servidor = grd.cd_cargo_base_servidor
+												  inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = cd_escola
                                             WHERE dcc.lotacao IS NULL
                                             group by cd_registro_funcional, dcc.cd_cargo_base_servidor, cd_escola, cd_cargo,
                                                   dc_cargo, dcc.carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem) tmpcrg) crg 
