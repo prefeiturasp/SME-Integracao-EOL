@@ -3320,58 +3320,57 @@ BEGIN
 		   AND MTB.cal_ano = (SELECT CAST(VALOR as int) FROM _PARAMETROS WHERE CHAVE = 'ANO_BASE')
 	 END
 
-	 CREATE TABLE #INSERIR2 (alu_id int, mtu_id int, controle int)
-
-	 while exists (select mtu.alu_id, mtu.mtu_id
-					 from GestaoPedagogica..ACA_AlunoCurriculo alc
-						  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-						  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
-						  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-						  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
-								  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
-							     and mb.mtu_id is not null
-						  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
-																			  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
-				    where alc.alc_situacao <> 3
-					  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
-					  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
-						   	  		   where mb.alu_id = mtu.alu_id
-						   	  		     and mb.mtu_origemDados = mtu.mtu_id)
-					 group by mtu.alu_id, mtu.mtu_id)
-	 begin
-	 truncate table #INSERIR2
-
-	 insert into #INSERIR2
-	 select top 10000 alu_id, mtu_id, 0
-	   from (select mtu.alu_id, mtu.mtu_id 
-			   from GestaoPedagogica..ACA_AlunoCurriculo alc
-				    inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-				    inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
-					inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-				    inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
-							on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
-						   and mb.mtu_id is not null
-					INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
-																			  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
-			  where alc.alc_situacao <> 3
-				and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
-			    and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
-								 where mb.alu_id = mtu.alu_id
-								   and mb.mtu_origemDados = mtu.mtu_id)
-			  group by mtu.alu_id, mtu.mtu_id) a 
-			  
-	 --select * from #INSERIR order by alu_id, mtu_id
+	 	CREATE TABLE #MatriculaBoletimDisciplinaDosAlunosASeremInseridos (linha int, alu_id int, mtu_id int, controle int);
+	CREATE TABLE #MatriculaBoletimDisciplinaDosAlunos (alu_id int, mtu_id int, controle int);
 	 
-	 insert into GestaoPedagogica..MTR_MatriculasBoletimDisciplina
-    (alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
-	 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
-	 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
-	 EntradaTransfOutrasRedes, mtu_origemDados)
-	 select alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
-	 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
-	 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
-	 EntradaTransfOutrasRedes, mtu_origemDados 
-		from (   select mtd.alu_id, mb.cal_ano, mb.cal_id, mb.cap_id, mb.tpc_id, mb.tpc_ordem, mtd.mtu_id, 
+	 INSERT INTO #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
+	 SELECT linha, alu_id, mtu_id, controle
+	 FROM (select ROW_NUMBER() OVER ( ORDER BY mtu.alu_id,mtu.mtu_id ) AS linha, mtu.alu_id, mtu.mtu_id, 0 as controle
+			 from GestaoPedagogica..ACA_AlunoCurriculo alc
+				  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
+				  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
+				  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
+				  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
+						  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
+						 and mb.mtu_id is not null
+				  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
+																	  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
+			where alc.alc_situacao <> 3
+			  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
+			  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
+							   where mb.alu_id = mtu.alu_id
+								 and mb.mtu_origemDados = mtu.mtu_id)
+			 group by mtu.alu_id, mtu.mtu_id) As Resultado
+		 
+	 DECLARE @QuantidadeDeRegistros INT = 0, @RegistrosPorPagina INT = 100, @Paginas INT = 0, @ContadorDePaginas INT = 1, @RegistroInicial INT = 1, @RegistroFinal INT = 0;
+	 
+	 SET @RegistroFinal = @RegistrosPorPagina;
+	 SET @QuantidadeDeRegistros = (SELECT COUNT(*) FROM #MatriculaBoletimDisciplinaDosAlunosASeremInseridos)
+	 SET @Paginas = CEILING(CONVERT(DECIMAL,@QuantidadeDeRegistros) / CONVERT(DECIMAL,@RegistrosPorPagina))
+	 
+	 while (@ContadorDePaginas <= @Paginas)
+	 begin
+		TRUNCATE TABLE #MatriculaBoletimDisciplinaDosAlunos;
+		
+		INSERT INTO #MatriculaBoletimDisciplinaDosAlunos
+		SELECT alu_id, mtu_id, controle FROM #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
+		WHERE linha >= @RegistroInicial AND linha <= @RegistroFinal
+		ORDER BY linha
+			
+		SET @RegistroInicial = @RegistroFinal + 1 ;
+		SET @ContadorDePaginas  = @ContadorDePaginas + 1;
+		SET @RegistroFinal = @ContadorDePaginas * @RegistrosPorPagina;		  
+			  
+		 insert into GestaoPedagogica..MTR_MatriculasBoletimDisciplina
+		(alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
+		 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
+		 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
+		 EntradaTransfOutrasRedes, mtu_origemDados)
+		 select alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
+		 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
+		 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
+		 EntradaTransfOutrasRedes, mtu_origemDados 
+			from (   select mtd.alu_id, mb.cal_ano, mb.cal_id, mb.cap_id, mb.tpc_id, mb.tpc_ordem, mtd.mtu_id, 
 						mtd.mtd_id, mb.esc_id, mb.tur_id, mb.tur_codigo, tud.tud_id, tud.tud_nome, tud.tud_tipo, 
 						dis.dis_id, dis.tds_id, mb.fav_id, mb.PeriodosEquivalentes, mb.MesmoCalendario, 
 						mb.MesmoFormato, mb.MesmaEscola, mtd.mtd_numeroChamada, mb.PossuiSaidaPeriodo, 
@@ -3390,8 +3389,8 @@ BEGIN
 								on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
 						inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id
 						inner join GestaoPedagogica..ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-						inner join #INSERIR2 
-								on #INSERIR2.alu_id = mtu.alu_id and #INSERIR2.mtu_id = mtu.mtu_id
+						inner join #MatriculaBoletimDisciplinaDosAlunos #mbdda 
+								on #mbdda.alu_id = mtu.alu_id and #mbdda.mtu_id = mtu.mtu_id
 						inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
 								on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
 							   and mb.mtu_id is not null
@@ -3417,7 +3416,8 @@ BEGIN
 	
 	 end
     
-	 drop table #INSERIR2
+	 DROP TABLE #MatriculaBoletimDisciplinaDosAlunos
+	 DROP TABLE #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
      ------------------------------------FIM ATUALIZACAO MatriculasBoletimDisciplina ------------------------------------
 	
 	UPDATE PackageTaskLog
