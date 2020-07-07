@@ -6067,6 +6067,14 @@ BEGIN
          WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
         
+		----Remove os UsarioGrupo que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupo ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and ug.gru_id = us.gru_id)
+		
         MERGE CoreSSO..SYS_UsuarioGrupo AS _target
         USING (SELECT usu_id, gru_id
                  FROM #tmp_Usuario
@@ -6089,6 +6097,14 @@ BEGIN
                AND ugu.uad_id = lo.uad_id
          WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
+
+		--Remove os UsarioGrupoUA que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupoUA ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and us.gru_id = ug.gru_id and us.uad_id =  ug.uad_id)
         
         -- Atualiza a tabela SSIS_RFImportado para inativar os registros que foram deletados em UsuarioGrupo
         MERGE CoreSSO..SYS_UsuarioGrupoUA AS _target
