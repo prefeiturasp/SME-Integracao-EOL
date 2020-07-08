@@ -3320,58 +3320,57 @@ BEGIN
 		   AND MTB.cal_ano = (SELECT CAST(VALOR as int) FROM _PARAMETROS WHERE CHAVE = 'ANO_BASE')
 	 END
 
-	 CREATE TABLE #INSERIR2 (alu_id int, mtu_id int, controle int)
-
-	 while exists (select mtu.alu_id, mtu.mtu_id
-					 from GestaoPedagogica..ACA_AlunoCurriculo alc
-						  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-						  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
-						  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-						  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
-								  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
-							     and mb.mtu_id is not null
-						  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
-																			  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
-				    where alc.alc_situacao <> 3
-					  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
-					  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
-						   	  		   where mb.alu_id = mtu.alu_id
-						   	  		     and mb.mtu_origemDados = mtu.mtu_id)
-					 group by mtu.alu_id, mtu.mtu_id)
-	 begin
-	 truncate table #INSERIR2
-
-	 insert into #INSERIR2
-	 select top 10000 alu_id, mtu_id, 0
-	   from (select mtu.alu_id, mtu.mtu_id 
-			   from GestaoPedagogica..ACA_AlunoCurriculo alc
-				    inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-				    inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
-					inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-				    inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
-							on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
-						   and mb.mtu_id is not null
-					INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
-																			  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
-			  where alc.alc_situacao <> 3
-				and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
-			    and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
-								 where mb.alu_id = mtu.alu_id
-								   and mb.mtu_origemDados = mtu.mtu_id)
-			  group by mtu.alu_id, mtu.mtu_id) a 
-			  
-	 --select * from #INSERIR order by alu_id, mtu_id
+	 	CREATE TABLE #MatriculaBoletimDisciplinaDosAlunosASeremInseridos (linha int, alu_id int, mtu_id int, controle int);
+	CREATE TABLE #MatriculaBoletimDisciplinaDosAlunos (alu_id int, mtu_id int, controle int);
 	 
-	 insert into GestaoPedagogica..MTR_MatriculasBoletimDisciplina
-    (alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
-	 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
-	 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
-	 EntradaTransfOutrasRedes, mtu_origemDados)
-	 select alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
-	 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
-	 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
-	 EntradaTransfOutrasRedes, mtu_origemDados 
-		from (   select mtd.alu_id, mb.cal_ano, mb.cal_id, mb.cap_id, mb.tpc_id, mb.tpc_ordem, mtd.mtu_id, 
+	 INSERT INTO #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
+	 SELECT linha, alu_id, mtu_id, controle
+	 FROM (select ROW_NUMBER() OVER ( ORDER BY mtu.alu_id,mtu.mtu_id ) AS linha, mtu.alu_id, mtu.mtu_id, 0 as controle
+			 from GestaoPedagogica..ACA_AlunoCurriculo alc
+				  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
+				  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
+				  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
+				  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
+						  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
+						 and mb.mtu_id is not null
+				  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
+																	  and mtu2.cur_id not in (123,124) --cursos sem TUD E MTD
+			where alc.alc_situacao <> 3
+			  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
+			  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
+							   where mb.alu_id = mtu.alu_id
+								 and mb.mtu_origemDados = mtu.mtu_id)
+			 group by mtu.alu_id, mtu.mtu_id) As Resultado
+		 
+	 DECLARE @QuantidadeDeRegistros INT = 0, @RegistrosPorPagina INT = 100, @Paginas INT = 0, @ContadorDePaginas INT = 1, @RegistroInicial INT = 1, @RegistroFinal INT = 0;
+	 
+	 SET @RegistroFinal = @RegistrosPorPagina;
+	 SET @QuantidadeDeRegistros = (SELECT COUNT(*) FROM #MatriculaBoletimDisciplinaDosAlunosASeremInseridos)
+	 SET @Paginas = CEILING(CONVERT(DECIMAL,@QuantidadeDeRegistros) / CONVERT(DECIMAL,@RegistrosPorPagina))
+	 
+	 while (@ContadorDePaginas <= @Paginas)
+	 begin
+		TRUNCATE TABLE #MatriculaBoletimDisciplinaDosAlunos;
+		
+		INSERT INTO #MatriculaBoletimDisciplinaDosAlunos
+		SELECT alu_id, mtu_id, controle FROM #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
+		WHERE linha >= @RegistroInicial AND linha <= @RegistroFinal
+		ORDER BY linha
+			
+		SET @RegistroInicial = @RegistroFinal + 1 ;
+		SET @ContadorDePaginas  = @ContadorDePaginas + 1;
+		SET @RegistroFinal = @ContadorDePaginas * @RegistrosPorPagina;		  
+			  
+		 insert into GestaoPedagogica..MTR_MatriculasBoletimDisciplina
+		(alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
+		 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
+		 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
+		 EntradaTransfOutrasRedes, mtu_origemDados)
+		 select alu_id, cal_ano, cal_id, cap_id, tpc_id, tpc_ordem, mtu_id, mtd_id, esc_id, tur_id, tur_codigo, tud_id,
+		 tud_nome, tud_tipo, dis_id, tds_id, fav_id, PeriodosEquivalentes, MesmoCalendario, MesmoFormato, MesmaEscola,
+		 mtd_numeroChamada, PossuiSaidaPeriodo, PossuiEntradaPeriodo, mov_id, registroExterno, EntradaImportacaoSCA,
+		 EntradaTransfOutrasRedes, mtu_origemDados 
+			from (   select mtd.alu_id, mb.cal_ano, mb.cal_id, mb.cap_id, mb.tpc_id, mb.tpc_ordem, mtd.mtu_id, 
 						mtd.mtd_id, mb.esc_id, mb.tur_id, mb.tur_codigo, tud.tud_id, tud.tud_nome, tud.tud_tipo, 
 						dis.dis_id, dis.tds_id, mb.fav_id, mb.PeriodosEquivalentes, mb.MesmoCalendario, 
 						mb.MesmoFormato, mb.MesmaEscola, mtd.mtd_numeroChamada, mb.PossuiSaidaPeriodo, 
@@ -3390,8 +3389,8 @@ BEGIN
 								on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
 						inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id
 						inner join GestaoPedagogica..ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-						inner join #INSERIR2 
-								on #INSERIR2.alu_id = mtu.alu_id and #INSERIR2.mtu_id = mtu.mtu_id
+						inner join #MatriculaBoletimDisciplinaDosAlunos #mbdda 
+								on #mbdda.alu_id = mtu.alu_id and #mbdda.mtu_id = mtu.mtu_id
 						inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
 								on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
 							   and mb.mtu_id is not null
@@ -3417,7 +3416,8 @@ BEGIN
 	
 	 end
     
-	 drop table #INSERIR2
+	 DROP TABLE #MatriculaBoletimDisciplinaDosAlunos
+	 DROP TABLE #MatriculaBoletimDisciplinaDosAlunosASeremInseridos
      ------------------------------------FIM ATUALIZACAO MatriculasBoletimDisciplina ------------------------------------
 	
 	UPDATE PackageTaskLog
@@ -5894,7 +5894,7 @@ BEGIN
     COMMIT
 
     -- Cadastramento de usuários
-    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER
+    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER, @gru_idDiretor UNIQUEIDENTIFIER, @gru_idCoordenador UNIQUEIDENTIFIER, @gru_idAssistenteDiretor UNIQUEIDENTIFIER
     DECLARE @TipoUAD table (tua_id UNIQUEIDENTIFIER)
     
 	INSERT INTO @TipoUAD
@@ -5908,10 +5908,19 @@ BEGIN
       uad_id UNIQUEIDENTIFIER)
     
     -- ID do sistema
-    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'
+    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'--204
 
 	SELECT @gru_idProfessor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
      WHERE gru.nomeUsadoIntegracao = 'Professor' and gru.sis_id = @sis_id
+
+	SELECT @gru_idCoordenador = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Coordenador Pedagógico' and gru.sis_id = @sis_id
+
+	SELECT @gru_idDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Diretor Escolar' and gru.sis_id = @sis_id
+
+	SELECT  @gru_idAssistenteDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao='Assistente de Diretor na UE' and gru.sis_id = @sis_id
     
     IF @gru_idProfessor IS NOT NULL
     BEGIN
@@ -5977,7 +5986,46 @@ BEGIN
                                  group by prf.rf, gc.cd_escola) prof
                          where prof.rf = ds.cd_registro_funcional
                            and prof.cd_escola = cb.lotacao)
-                 group by ds.cd_registro_funcional, cb.lotacao) serv
+                  group by ds.cd_registro_funcional, cb.lotacao
+				 
+				 UNION ALL
+
+				 --Servidores que possuem cargo base de diretor ou coordenador pedagógio e não possuem cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						CRG.lotacao,
+						CASE crg.cd_cargo 
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+						END AS gru_id
+					FROM tmp_cargobase_mstech crg WITH (NOLOCK)
+						LEFT JOIN tmp_cargosobreposto_mstech cgs WITH (NOLOCK) ON crg.cd_cargo_base_servidor = cgs.cd_cargo_base_servidor
+						inner join GestaoPedagogica..RHU_Cargo WITH (NOLOCK) on crg.cd_cargo = RHU_Cargo.crg_codigo and isnull(crg.cd_situacao_funcional,1) = RHU_Cargo.tvi_id
+					WHERE 
+						cgs.cd_cargo IS NULL
+						AND RHU_Cargo.crg_situacao <> 3
+						AND crg.cd_cargo IN (3360, 3379, 3085) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+						AND CRG.lotacao IS NOT NULL
+					GROUP BY crg.cd_registro_funcional, crg.cd_cargo, CRG.lotacao
+
+					UNION ALL
+
+				--Servidores que passaram a ser coordenadores pedagógicos ou diretores através do cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						crs.cd_unidade_local_servico lotacao,
+						CASE crs.cd_cargo
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+							END AS gru_id
+					FROM tmp_cargosobreposto_mstech crs WITH (NOLOCK)
+						INNER JOIN tmp_cargobase_mstech crg WITH (NOLOCK) ON crs.cd_cargo_base_servidor = crg.cd_cargo_base_servidor
+					WHERE 
+						crs.cd_cargo IN (3360, 3379, 3085) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor
+					GROUP BY crs.cd_cargo_base_servidor,crg.cd_registro_funcional, crs.cd_cargo, crs.cd_unidade_local_servico
+                 ) serv
                INNER JOIN CoreSSO..SYS_Usuario usu WITH (NOLOCK)
                ON serv.rf = usu.usu_login
                INNER JOIN CoreSSO..SYS_UnidadeAdministrativa uad WITH (NOLOCK)
@@ -5994,18 +6042,18 @@ BEGIN
                       ON tmp.usu_id = usu.usu_id
                 GROUP BY usu.usu_id, usu.usu_login, tmp.gru_id, tmp.uad_id) AS _source
          ON  _source.usu_login = _target.ssi_login
-        AND _source.gru_id = _target.gru_id
-        AND _source.uad_id = _target.uad_id
-        AND _source.usu_id = _target.usu_id
+            AND _source.gru_id = _target.gru_id
+            AND _source.uad_id = _target.uad_id
+            AND _source.usu_id = _target.usu_id
         WHEN NOT MATCHED THEN
     	     INSERT (usu_id, ssi_login, gru_id, uad_id, ssi_situacao)
 	         VALUES (_source.usu_id, _source.usu_login, _source.gru_id, _source.uad_id, 1)
         WHEN MATCHED AND (_target.ssi_situacao = 3
-                     AND _target.gru_id = @gru_idProfessor
+                     AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
                      AND _target.uad_id = _source.uad_id) THEN
              UPDATE SET ssi_situacao = 1,
                         ssi_dataAlteracao = GETDATE()
-        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id = @gru_idProfessor) THEN
+        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)) THEN
 	         UPDATE SET ssi_situacao = 3,
                         ssi_dataAlteracao = GETDATE();
         
@@ -6016,9 +6064,17 @@ BEGIN
                INNER JOIN SSIS_LoginImportado lo
                 ON ug.usu_id = lo.usu_id
                AND ug.gru_id = lo.gru_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
         
+		----Remove os UsarioGrupo que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupo ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and ug.gru_id = us.gru_id)
+		
         MERGE CoreSSO..SYS_UsuarioGrupo AS _target
         USING (SELECT usu_id, gru_id
                  FROM #tmp_Usuario
@@ -6039,8 +6095,16 @@ BEGIN
                 ON ugu.usu_id = lo.usu_id
                AND ugu.gru_id = lo.gru_id
                AND ugu.uad_id = lo.uad_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
            AND lo.ssi_situacao = 3
+
+		--Remove os UsarioGrupoUA que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupoUA ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and us.gru_id = ug.gru_id and us.uad_id =  ug.uad_id)
         
         -- Atualiza a tabela SSIS_RFImportado para inativar os registros que foram deletados em UsuarioGrupo
         MERGE CoreSSO..SYS_UsuarioGrupoUA AS _target
@@ -11792,6 +11856,7 @@ BEGIN
                                      FROM (select cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   null AS carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem
                                              from tmp_DiarioClasse_cargos
+											 inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = lotacao
                                             WHERE lotacao IS NOT NULL
                                             group by cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   dt_inicio, cd_situacao_funcional, pes_id, origem
@@ -11802,6 +11867,7 @@ BEGIN
                                                   inner join BD_PRODAM..v_grade_curricular grd
                                                    on dcc.cd_registro_funcional = grd.rf
                                                   and dcc.cd_cargo_base_servidor = grd.cd_cargo_base_servidor
+												  inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = cd_escola
                                             WHERE dcc.lotacao IS NULL
                                             group by cd_registro_funcional, dcc.cd_cargo_base_servidor, cd_escola, cd_cargo,
                                                   dc_cargo, dcc.carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem) tmpcrg) crg 
@@ -12748,9 +12814,9 @@ BEGIN
     WHEN MATCHED AND _target.tcr_situacao <> 1 THEN
          UPDATE SET tcr_situacao = 1, tcr_dataAlteracao = GETDATE()
     WHEN NOT MATCHED THEN
-         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao, tcp_id)
+         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_prioridade, tcr_situacao)
          VALUES (_source.tur_id, _source.cur_id, _source.crr_id, _source.crp_id,
-                 _source.tcr_prioridade, _source.tcr_situacao, _source.tcp_id);
+                 _source.tcr_prioridade, _source.tcr_situacao);
   
 	--AEE
     update tur 
