@@ -5046,10 +5046,17 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate())
-    
+         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate());
+
+	WITH CteDestinationTurma AS(
+		Select t.* from GestaoAvaliacao_SGP..TUR_Turma t 
+		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+		where c.tme_id NOT IN (4,6,7,8)
+	)
+		 
 	-- TUR_Turma
-    MERGE INTO GestaoAvaliacao_SGP..TUR_Turma Destino
+    MERGE INTO CteDestinationTurma Destino
     USING (select tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo
              from GestaoPedagogica..TUR_Turma tur with (nolock)
@@ -5061,6 +5068,8 @@ BEGIN
                   on tur.esc_id = esc.esc_id
                   inner join GestaoAvaliacao_SGP..ACA_CalendarioAnual cal
                   on tur.cal_id = cal.cal_id
+				  INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = tur.tur_id
+			      INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id
             where tur.tur_situacao <> 3
               and trn.trn_situacao <> 3
               and ttn.ttn_situacao <> 3
@@ -5070,6 +5079,7 @@ BEGIN
               and cal.ent_id = @ent_id
               and cal.cal_situacao <> 3
 			  and tur_tipo = 1
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo) Origem
     ON Destino.tur_id = Origem.tur_id
@@ -5125,8 +5135,23 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Aluno', @SourceID, getdate())
     
+	SELECT mt.alu_id INTO #CteIdDosAlunosDoEjaeCieja 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mt WITH (NOLOCK)
+		INNER JOIN GestaoAvaliacao_SGP..TUR_Turma t WITH (NOLOCK) ON mt.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc WITH (NOLOCK) ON tc.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = tc.cur_id 
+	WHERE c.tme_id IN (4,6,7,8)
+	GROUP BY mt.alu_id;
+
+	WITH CteAlunoParaMerge AS 
+	(
+		SELECT aluno.*
+			FROM GestaoAvaliacao_SGP..ACA_Aluno aluno WITH (NOLOCK)
+		WHERE aluno.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
+	)
+	
     -- ACA_Aluno
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Aluno Destino
+    MERGE INTO CteAlunoParaMerge Destino
     USING (select alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao
              from GestaoPedagogica..ACA_Aluno alu with (nolock)
@@ -5140,6 +5165,7 @@ BEGIN
             where alu.ent_id = @ent_id
               and alu.alu_situacao <> 3
               and pes.pes_situacao <> 3
+			  and alu.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
             group by alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao) Origem
     ON Destino.alu_id = Origem.alu_id
@@ -5275,7 +5301,7 @@ BEGIN
          INSERT (tcp_id, tne_id, tme_id, tcp_descricao, tcp_ordem, tcp_situacao, tcp_dataCriacao, tcp_dataAlteracao)
          VALUES (Origem.tcp_id, Origem.tne_id, Origem.tme_id, Origem.tcp_descricao, Origem.tcp_ordem,
                  Origem.tcp_situacao, Origem.tcp_dataCriacao, Origem.tcp_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET tcp_situacao = 3,
                     tcp_dataAlteracao = GETDATE();
     
@@ -5329,7 +5355,7 @@ BEGIN
          VALUES (Origem.cur_id, Origem.ent_id, Origem.tne_id, Origem.tme_id, Origem.cur_codigo,
                  Origem.cur_nome, Origem.cur_nome_abreviado,
                  Origem.cur_situacao, Origem.cur_dataCriacao, Origem.cur_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET cur_situacao = 3,
                     cur_dataAlteracao = GETDATE();
     
@@ -5347,17 +5373,24 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate());
     
+	WITH CteCurriculo AS (
+		SELECT ac.* from GestaoAvaliacao_SGP..ACA_Curriculo ac   
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = ac.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    );
+	
     -- ACA_Curriculo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Curriculo Destino
+    MERGE INTO CteCurriculo Destino
     USING (select crr.cur_id, crr.crr_id, crr.crr_nome, crr.crr_situacao, crr.crr_dataCriacao, crr.crr_dataAlteracao
              from GestaoPedagogica..ACA_Curriculo crr with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curso cur
                   on crr.cur_id = cur.cur_id
             where crr_situacao <> 3
               and ent_id = @ent_id
-              and cur_situacao <> 3) Origem
+              and cur_situacao <> 3
+			  and tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     WHEN MATCHED
@@ -5390,21 +5423,30 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate());
     
+	WITH CteCurriculoPeriodo AS (
+		select crp.* from GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
+		inner join GestaoAvaliacao_SGP..ACA_Curriculo crr on crp.cur_id = crr.cur_id and crp.crr_id = crr.crr_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    )
+	
     -- ACA_CurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_CurriculoPeriodo Destino
+    MERGE INTO CteCurriculoPeriodo Destino
     USING (select crp.cur_id, crp.crr_id, crp.crp_id, crp.crp_ordem, crp.crp_descricao, crp.crp_situacao,
                   crp.crp_dataCriacao, crp.crp_dataAlteracao, crp.tcp_id
              from GestaoPedagogica..ACA_CurriculoPeriodo crp with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curriculo crr
                    on crp.cur_id = crr.cur_id
                   and crp.crr_id = crr.crr_id
+				  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
                   left join GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo atcp
                    on crp.tcp_id = atcp.tcp_id
                   and 3 <> atcp.tcp_situacao
             where crp.crp_situacao <> 3
-              and crr.crr_situacao <> 3) Origem
+              and crr.crr_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
@@ -5535,15 +5577,22 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate());
     
+	WITH CteTurmaCurriculo AS (
+		Select tc.* from GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+		where c.tme_id NOT IN (4,6,7,8)
+	)
+	
     -- TUR_TurmaCurriculo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaCurriculo Destino
+    MERGE INTO CteTurmaCurriculo Destino
     USING (select tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
                   tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id
              from GestaoAvaliacao_SGP..TUR_Turma tur
               inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
                   on tur.tur_id = tcr.tur_id
+			  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tcr.cur_id
               inner join GestaoPedagogica..ACA_CurriculoPeriodo crp1
                     ON tcr.cur_id = crp1.cur_id
                       and tcr.crr_id = crp1.crr_id
@@ -5556,6 +5605,7 @@ BEGIN
             where tur.tur_situacao <> 3
               and tcr.tcr_situacao <> 3
               and crp.crp_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
                   tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id) Origem
      ON Destino.tur_id = Origem.tur_id
@@ -5638,8 +5688,17 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate())
+         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate());
     
+	SELECT mtu.* INTO #TempMAtriculaTurma
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = mtu.cur_id
+	WHERE c.tme_id IN (4,6,7,8)
+	
+	DECLARE @DataAlteracaoMatriculaTurma DATETIME
+	SET @DataAlteracaoMatriculaTurma = GETDATE()
+
+	
     -- MTR_MatriculaTurma
      MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
     USING (select alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
@@ -5683,8 +5742,15 @@ BEGIN
                  Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.mtu_situacao <> 3 THEN
          UPDATE SET mtu_situacao = 3,
-                    mtu_dataAlteracao = GETDATE();
+                    mtu_dataAlteracao = @DataAlteracaoMatriculaTurma;
     
+	UPDATE mtu SET
+		mtu.mtu_situacao = temp.mtu_situacao, 
+		mtu.mtu_dataAlteracao = temp.mtu_dataAlteracao 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+	INNER JOIN #TempMAtriculaTurma temp ON mtu.alu_id = temp.alu_id AND  mtu.mtu_id = temp.mtu_id
+	WHERE mtu.mtu_situacao = 3 and mtu.mtu_dataAlteracao = @DataAlteracaoMatriculaTurma
+	
     IF @@ERROR <> 0
     BEGIN
        PRINT 'Erro na integração de dados na tabela MTR_MatriculaTurma'
@@ -5830,14 +5896,21 @@ BEGIN
          UPDATE SET tdt_situacao = 3,
                     tdt_dataAlteracao = GETDATE();
 
+					
+	WITH CteTurmaTipoCurriculoPeriodo AS (
+		SELECT * FROM GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo
+		WHERE tme_id NOT IN (4,6,7,8)
+	)
+
+					
     -- TUR_TurmaTipoCurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo Destino
+    MERGE INTO CteTurmaTipoCurriculoPeriodo Destino
 	USING (SELECT t.tur_id, cur.cur_id, cur.tme_id, cur.tne_id, crp.crp_ordem, t.esc_id, cur.cur_situacao, t.tur_situacao, crp.crp_situacao, tcr.tcr_situacao
 		FROM GestaoAvaliacao_SGP..TUR_Turma t
 		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tcr ON t.tur_id = tcr.tur_id AND tcr.tcr_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp ON crp.cur_id = tcr.cur_id AND crp.crr_id = tcr.crr_id AND crp.crp_id = tcr.crp_id AND crp.crp_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso cur ON cur.cur_id = tcr.cur_id AND cur.cur_situacao = 1
-		where t.tur_situacao = 1) Origem
+		where t.tur_situacao = 1 AND cur.tme_id NOT IN (4,6,7,8)) Origem
 	ON Destino.tur_id = Origem.tur_id 
 		AND Destino.crp_ordem = Origem.crp_ordem
 		AND Destino.tne_id = Origem.tne_id
