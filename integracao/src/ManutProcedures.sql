@@ -5107,11 +5107,14 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate());
 
-	WITH CteDestinationTurma AS(
-		Select t.* from GestaoAvaliacao_SGP..TUR_Turma t 
-		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
-		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
-		where c.tme_id NOT IN (4,6,7,8)
+	WITH CteDestinationTurma AS (
+		Select * from GestaoAvaliacao_SGP..TUR_Turma
+		WHERE tur_id IN ( 
+			Select t.tur_id from GestaoAvaliacao_SGP..TUR_Turma t 
+			INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+			INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+			where c.tme_id NOT IN (4,6,7,8)
+		)
 	)
 		 
 	-- TUR_Turma
