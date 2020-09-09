@@ -132,6 +132,65 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[STP_GestaoAvaliacao_Import]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[STP_GestaoAvaliacao_Import]
 GO
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_ACATipoCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_ACATipoCurriculoPeriodoEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_ACATipoCurriculoPeriodoEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_EjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_EjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_EjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT]
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT]
+GO
 /****** Object:  StoredProcedure [dbo].[STP_GestaoEscolarBiblioteca_Usuario_IMPORT]    Script Date: 06/17/2014 09:23:27 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[STP_GestaoEscolarBiblioteca_Usuario_IMPORT]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[STP_GestaoEscolarBiblioteca_Usuario_IMPORT]
@@ -5046,10 +5105,20 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate())
-    
+         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate());
+
+	WITH CteDestinationTurma AS (
+		Select * from GestaoAvaliacao_SGP..TUR_Turma
+		WHERE tur_id IN ( 
+			Select t.tur_id from GestaoAvaliacao_SGP..TUR_Turma t 
+			INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+			INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+			where c.tme_id NOT IN (4,6,7,8)
+		)
+	)
+		 
 	-- TUR_Turma
-    MERGE INTO GestaoAvaliacao_SGP..TUR_Turma Destino
+    MERGE INTO CteDestinationTurma Destino
     USING (select tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo
              from GestaoPedagogica..TUR_Turma tur with (nolock)
@@ -5061,6 +5130,8 @@ BEGIN
                   on tur.esc_id = esc.esc_id
                   inner join GestaoAvaliacao_SGP..ACA_CalendarioAnual cal
                   on tur.cal_id = cal.cal_id
+				  INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = tur.tur_id
+			      INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id
             where tur.tur_situacao <> 3
               and trn.trn_situacao <> 3
               and ttn.ttn_situacao <> 3
@@ -5070,6 +5141,7 @@ BEGIN
               and cal.ent_id = @ent_id
               and cal.cal_situacao <> 3
 			  and tur_tipo = 1
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo) Origem
     ON Destino.tur_id = Origem.tur_id
@@ -5125,8 +5197,23 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Aluno', @SourceID, getdate())
     
+	SELECT mt.alu_id INTO #CteIdDosAlunosDoEjaeCieja 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mt WITH (NOLOCK)
+		INNER JOIN GestaoAvaliacao_SGP..TUR_Turma t WITH (NOLOCK) ON mt.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc WITH (NOLOCK) ON tc.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = tc.cur_id 
+	WHERE c.tme_id IN (4,6,7,8)
+	GROUP BY mt.alu_id;
+
+	WITH CteAlunoParaMerge AS 
+	(
+		SELECT aluno.*
+			FROM GestaoAvaliacao_SGP..ACA_Aluno aluno WITH (NOLOCK)
+		WHERE aluno.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
+	)
+	
     -- ACA_Aluno
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Aluno Destino
+    MERGE INTO CteAlunoParaMerge Destino
     USING (select alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao
              from GestaoPedagogica..ACA_Aluno alu with (nolock)
@@ -5140,6 +5227,7 @@ BEGIN
             where alu.ent_id = @ent_id
               and alu.alu_situacao <> 3
               and pes.pes_situacao <> 3
+			  and alu.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
             group by alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao) Origem
     ON Destino.alu_id = Origem.alu_id
@@ -5275,7 +5363,7 @@ BEGIN
          INSERT (tcp_id, tne_id, tme_id, tcp_descricao, tcp_ordem, tcp_situacao, tcp_dataCriacao, tcp_dataAlteracao)
          VALUES (Origem.tcp_id, Origem.tne_id, Origem.tme_id, Origem.tcp_descricao, Origem.tcp_ordem,
                  Origem.tcp_situacao, Origem.tcp_dataCriacao, Origem.tcp_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET tcp_situacao = 3,
                     tcp_dataAlteracao = GETDATE();
     
@@ -5329,7 +5417,7 @@ BEGIN
          VALUES (Origem.cur_id, Origem.ent_id, Origem.tne_id, Origem.tme_id, Origem.cur_codigo,
                  Origem.cur_nome, Origem.cur_nome_abreviado,
                  Origem.cur_situacao, Origem.cur_dataCriacao, Origem.cur_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET cur_situacao = 3,
                     cur_dataAlteracao = GETDATE();
     
@@ -5347,17 +5435,24 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate());
     
+	WITH CteCurriculo AS (
+		SELECT ac.* from GestaoAvaliacao_SGP..ACA_Curriculo ac   
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = ac.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    );
+	
     -- ACA_Curriculo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Curriculo Destino
+    MERGE INTO CteCurriculo Destino
     USING (select crr.cur_id, crr.crr_id, crr.crr_nome, crr.crr_situacao, crr.crr_dataCriacao, crr.crr_dataAlteracao
              from GestaoPedagogica..ACA_Curriculo crr with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curso cur
                   on crr.cur_id = cur.cur_id
             where crr_situacao <> 3
               and ent_id = @ent_id
-              and cur_situacao <> 3) Origem
+              and cur_situacao <> 3
+			  and tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     WHEN MATCHED
@@ -5390,21 +5485,30 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate());
     
+	WITH CteCurriculoPeriodo AS (
+		select crp.* from GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
+		inner join GestaoAvaliacao_SGP..ACA_Curriculo crr on crp.cur_id = crr.cur_id and crp.crr_id = crr.crr_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    )
+	
     -- ACA_CurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_CurriculoPeriodo Destino
+    MERGE INTO CteCurriculoPeriodo Destino
     USING (select crp.cur_id, crp.crr_id, crp.crp_id, crp.crp_ordem, crp.crp_descricao, crp.crp_situacao,
                   crp.crp_dataCriacao, crp.crp_dataAlteracao, crp.tcp_id
              from GestaoPedagogica..ACA_CurriculoPeriodo crp with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curriculo crr
                    on crp.cur_id = crr.cur_id
                   and crp.crr_id = crr.crr_id
+				  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
                   left join GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo atcp
                    on crp.tcp_id = atcp.tcp_id
                   and 3 <> atcp.tcp_situacao
             where crp.crp_situacao <> 3
-              and crr.crr_situacao <> 3) Origem
+              and crr.crr_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
@@ -5535,15 +5639,22 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate());
     
+	WITH CteTurmaCurriculo AS (
+		Select tc.* from GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+		where c.tme_id NOT IN (4,6,7,8)
+	)
+	
     -- TUR_TurmaCurriculo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaCurriculo Destino
+    MERGE INTO CteTurmaCurriculo Destino
     USING (select tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
                   tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id
              from GestaoAvaliacao_SGP..TUR_Turma tur
               inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
                   on tur.tur_id = tcr.tur_id
+			  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tcr.cur_id
               inner join GestaoPedagogica..ACA_CurriculoPeriodo crp1
                     ON tcr.cur_id = crp1.cur_id
                       and tcr.crr_id = crp1.crr_id
@@ -5556,6 +5667,7 @@ BEGIN
             where tur.tur_situacao <> 3
               and tcr.tcr_situacao <> 3
               and crp.crp_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
                   tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id) Origem
      ON Destino.tur_id = Origem.tur_id
@@ -5638,8 +5750,17 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate())
+         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate());
     
+	SELECT mtu.* INTO #TempMAtriculaTurma
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = mtu.cur_id
+	WHERE c.tme_id IN (4,6,7,8)
+	
+	DECLARE @DataAlteracaoMatriculaTurma DATETIME
+	SET @DataAlteracaoMatriculaTurma = GETDATE()
+
+	
     -- MTR_MatriculaTurma
      MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
     USING (select alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
@@ -5683,8 +5804,15 @@ BEGIN
                  Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.mtu_situacao <> 3 THEN
          UPDATE SET mtu_situacao = 3,
-                    mtu_dataAlteracao = GETDATE();
+                    mtu_dataAlteracao = @DataAlteracaoMatriculaTurma;
     
+	UPDATE mtu SET
+		mtu.mtu_situacao = temp.mtu_situacao, 
+		mtu.mtu_dataAlteracao = temp.mtu_dataAlteracao 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+	INNER JOIN #TempMAtriculaTurma temp ON mtu.alu_id = temp.alu_id AND  mtu.mtu_id = temp.mtu_id
+	WHERE mtu.mtu_situacao = 3 and mtu.mtu_dataAlteracao = @DataAlteracaoMatriculaTurma
+	
     IF @@ERROR <> 0
     BEGIN
        PRINT 'Erro na integração de dados na tabela MTR_MatriculaTurma'
@@ -5830,14 +5958,21 @@ BEGIN
          UPDATE SET tdt_situacao = 3,
                     tdt_dataAlteracao = GETDATE();
 
+					
+	WITH CteTurmaTipoCurriculoPeriodo AS (
+		SELECT * FROM GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo
+		WHERE tme_id NOT IN (4,6,7,8)
+	)
+
+					
     -- TUR_TurmaTipoCurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo Destino
+    MERGE INTO CteTurmaTipoCurriculoPeriodo Destino
 	USING (SELECT t.tur_id, cur.cur_id, cur.tme_id, cur.tne_id, crp.crp_ordem, t.esc_id, cur.cur_situacao, t.tur_situacao, crp.crp_situacao, tcr.tcr_situacao
 		FROM GestaoAvaliacao_SGP..TUR_Turma t
 		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tcr ON t.tur_id = tcr.tur_id AND tcr.tcr_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp ON crp.cur_id = tcr.cur_id AND crp.crr_id = tcr.crr_id AND crp.crp_id = tcr.crp_id AND crp.crp_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso cur ON cur.cur_id = tcr.cur_id AND cur.cur_situacao = 1
-		where t.tur_situacao = 1) Origem
+		where t.tur_situacao = 1 AND cur.tme_id NOT IN (4,6,7,8)) Origem
 	ON Destino.tur_id = Origem.tur_id 
 		AND Destino.crp_ordem = Origem.crp_ordem
 		AND Destino.tne_id = Origem.tne_id
@@ -6120,6 +6255,960 @@ BEGIN
     END
 END
 GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:56 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT] 
+	@esc_codigo VARCHAR(50),
+	@dc_turma_escola VARCHAR(200),
+	@cal_id INT,
+	@cd_turma_escola INT,
+	@DataDeCadastro DateTime
+AS
+BEGIN
+	IF OBJECT_ID('tempdb.dbo.#Alunos', 'U') IS NOT NULL
+		DROP TABLE #Alunos;
+		
+	IF OBJECT_ID('tempdb.dbo.#Usuarios', 'U') IS NOT NULL
+		DROP TABLE #Usuarios;	
+
+	IF OBJECT_ID('tempdb.dbo.#AlunosInclusao', 'U') IS NOT NULL
+		DROP TABLE #AlunosInclusao;	
+
+	IF OBJECT_ID('tempdb.dbo.#AlunosSemGrupo', 'U') IS NOT NULL
+		DROP TABLE #AlunosSemGrupo;
+
+	SELECT CodigoTurmaEscola,CodigoAluno,'RA'+CONVERT(VARCHAR,CodigoAluno) As CodigoAlunoRA,NomeAluno,DataNascimento,NomeSocialAluno,
+		CodigoSituacaoMatricula,SituacaoMatricula,DataSituacao,NumeroAlunoChamada,PossuiDeficiencia
+	INTO #Alunos 
+	FROM BD_PRODAM..AlunosDoCieja
+	WHERE CodigoSituacaoMatricula IN (1,5,7,13) 
+	AND CodigoTurmaEscola  = @cd_turma_escola
+
+	IF EXISTS(SELECT * FROM #Alunos)
+	BEGIN 
+		SELECT u.usu_login,
+			   u.pes_id,
+			   u.usu_id,
+				g.gru_id INTO #Usuarios
+			FROM CORESSO..SYS_Usuario u
+				LEFT JOIN CORESSO..SYS_UsuarioGrupo ug
+					ON u.usu_id = ug.usu_id
+				LEFT JOIN CORESSO..SYS_Grupo g
+					ON ug.gru_id = g.gru_id
+		WHERE 
+			g.sis_id = 204 AND
+			g.gru_situacao = 1 AND
+			u.usu_situacao = 1 AND
+			g.gru_nome = 'Aluno' AND
+			u.usu_login IN (SELECT CodigoAlunoRA FROm #Alunos)
+
+		SELECT * INTO #AlunosInclusao FROM #Alunos
+		WHERE CodigoAlunoRA NOT IN (SELECT usu_login FROM #Usuarios)
+
+		SELECT * INTO #AlunosSemGrupo FROM #Usuarios
+		WHERE gru_id IS NULL
+
+		DECLARE @CountAlunosInclusao INT = (SELECT COUNT(*) FROM #AlunosInclusao)
+		DECLARE @CountAlunosSemGrupo INT = (SELECT COUNT(*) FROM #AlunosSemGrupo)
+		DECLARE @CodigoALuno INT
+		DECLARE @CodigoAlunoRA VARCHAR(200)
+		DECLARE @NomeALuno VARCHAR(200)
+		DECLARE @DataNasCimento DATETIME
+		DECLARE @DataSituacao DATETIME
+		DECLARE @Pes_id UNIQUEIDENTIFIER
+		DECLARE @Usu_id UNIQUEIDENTIFIER
+		DECLARE @Senha VARCHAR(MAX)
+		DECLARE @DataMatricula DATETIME
+		DECLARE @NumeroDaChamada INT
+		DECLARE @QuantidadeDeMatriculas INT
+		
+		IF (@CountAlunosInclusao>0 OR @CountAlunosSemGrupo>0)
+		BEGIN
+			DECLARE Cursor_alunosInclusao CURSOR FOR 
+			SELECT CodigoAluno,CodigoAlunoRA, NomeALuno, DataNasCimento, DataSituacao, NumeroAlunoChamada
+				FROM #AlunosInclusao
+			OPEN Cursor_alunosInclusao
+			
+			FETCH NEXT FROM Cursor_alunosInclusao INTO @CodigoALuno, @CodigoAlunoRA, @NomeALuno, @DataNasCimento, @DataSituacao, @NumeroDaChamada
+
+			WHILE @@FETCH_STATUS = 0  
+			BEGIN  
+				SET @Senha = (select [HASH] from SENHAHASH senhaHash WHERE senhaHash.SENHA = SUBSTRING(@CodigoAlunoRA,LEN(@CodigoAlunoRA)-3,4))
+				
+				SELECT @Pes_id = pes_id, @Usu_id = usu_id FROM CORESSO..SYS_Usuario WHERE usu_login = @CodigoAlunoRA AND usu_situacao = 1
+				
+				IF (@Usu_id IS NULL)
+				BEGIN
+					SET @Pes_id = NEWID()
+					SET @Usu_id = NEWID()
+					INSERT INTO CORESSO..PES_Pessoa (pes_id, pes_nome, pes_dataNascimento, pes_situacao, pes_dataCriacao, pes_dataAlteracao, pes_integridade)
+					VALUES (@pes_id, @NomeALuno, @DataNasCimento, 1, @DataDeCadastro, @DataDeCadastro, 0);
+			
+					INSERT INTO CORESSO..SYS_Usuario (usu_id, usu_login, usu_senha, usu_criptografia, usu_situacao, usu_dataCriacao, usu_dataAlteracao, pes_id, usu_integridade, ent_id, usu_integracaoAD, usu_dataAlteracaoSenha)
+					VALUES(@Usu_id, @CodigoAlunoRA, @Senha, 3, 1, @DataDeCadastro, @DataDeCadastro, @pes_id, 0, '6CF424DC-8EC3-E011-9B36-00155D033206', 0, @DataDeCadastro);
+			
+					INSERT INTO CORESSO..SYS_UsuarioGrupo (usu_id, gru_id, usg_situacao) VALUES(@Usu_id, (SELECT TOP 1 gru_id FROM CoreSSO..SYS_Grupo WHERE sis_id = 204 AND gru_situacao = 1 AND gru_nome = 'Aluno'), 1);
+				END
+				ELSE IF NOT EXISTS (SELECT 1 FROM CORESSO..SYS_UsuarioGrupo WHERE usu_id = @Usu_id and usg_situacao = 1)
+				BEGIN
+					PRINT 'INSERT Usuário e Grupo'
+					PRINT @esc_codigo
+					PRINT @dc_turma_escola
+					PRINT @cal_id
+					PRINT @cd_turma_escola
+					PRINT @DataDeCadastro
+					INSERT INTO CORESSO..SYS_UsuarioGrupo (usu_id, gru_id, usg_situacao) VALUES(@Usu_id, (SELECT TOP 1 gru_id FROM CoreSSO..SYS_Grupo WHERE sis_id = 204 AND gru_situacao = 1 AND gru_nome = 'Aluno'), 1);
+				END
+				
+				IF OBJECT_ID('tempdb.dbo.#MatriculasDoALunoEja', 'U') IS NOT NULL
+					DROP TABLE #MatriculasDoALunoEja;
+				
+				SELECT CodigoDoAluno,DataStatusMatricula,SituacaoMatricula 
+					INTO #MatriculasDoALunoEja
+				FROM BD_PRODAM..MatriculaDosALunosEjaEol
+				WHERE CodigoDoAluno = @CodigoALuno
+				
+				SET @DataMatricula = @DataSituacao
+				SET @QuantidadeDeMatriculas  = (SELECT COUNT(*) FROM #MatriculasDoALunoEja)
+			
+				IF( @QuantidadeDeMatriculas= 1)
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoEja)
+				ELSE IF(@QuantidadeDeMatriculas > 1 AND EXISTS (SELECT DataStatusMatricula FROM #MatriculasDoALunoEja WHERE SituacaoMatricula = 1))
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoEja WHERE SituacaoMatricula = 1  ORDER BY DataStatusMatricula DESC)
+				ELSE
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoEja ORDER BY DataStatusMatricula DESC)
+				
+				EXEC [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT] @pes_id, @CodigoALuno, @NomeALuno, @NumeroDaChamada, @NumeroDaChamada,
+					@DataMatricula, @esc_codigo, @dc_turma_escola, @cal_id, @DataDeCadastro
+				
+				FETCH NEXT FROM Cursor_alunosInclusao INTO @CodigoALuno, @CodigoAlunoRA, @NomeALuno, @DataNasCimento, @DataSituacao, @NumeroDaChamada
+			END
+			CLOSE Cursor_alunosInclusao;
+			DEALLOCATE Cursor_alunosInclusao;	
+			
+			INSERT INTO CORESSO..SYS_UsuarioGrupo (usu_id, gru_id, usg_situacao)
+			SELECT usu_id, (SELECT TOP 1 gru_id FROM CORESSO..SYS_Grupo WHERE sis_id = 204 AND gru_situacao = 1 AND gru_nome = 'Aluno'), 1 
+			FROM #AlunosSemGrupo
+		END
+	END	
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:54 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT] 
+	@esc_codigo VARCHAR(50),
+	@dc_turma_escola VARCHAR(200),
+	@cal_id INT,
+	@cd_turma_escola INT,
+	@DataDeCadastro DateTime
+AS
+BEGIN
+	IF OBJECT_ID('tempdb.dbo.#Alunos', 'U') IS NOT NULL
+		DROP TABLE #Alunos;
+		
+	IF OBJECT_ID('tempdb.dbo.#Usuarios', 'U') IS NOT NULL
+		DROP TABLE #Usuarios;	
+
+	IF OBJECT_ID('tempdb.dbo.#AlunosComUsuario', 'U') IS NOT NULL
+		DROP TABLE #AlunosComUsuario;	
+
+	SELECT CodigoTurmaEscola,CodigoAluno,'RA'+CONVERT(VARCHAR,CodigoAluno) As CodigoAlunoRA,NomeAluno,DataNascimento,NomeSocialAluno,
+		CodigoSituacaoMatricula,SituacaoMatricula,DataSituacao,NumeroAlunoChamada,PossuiDeficiencia
+	INTO #Alunos 
+	FROM BD_PRODAM..AlunosDoCieja
+	WHERE CodigoSituacaoMatricula IN (1,5,7,13) 
+	AND CodigoTurmaEscola  = @cd_turma_escola
+	
+	IF EXISTS(SELECT * FROM #Alunos)
+	BEGIN 
+		SELECT u.usu_login,
+			   u.pes_id,
+			   u.usu_id,
+				g.gru_id INTO #Usuarios
+			FROM CORESSO..SYS_Usuario u
+				LEFT JOIN CORESSO..SYS_UsuarioGrupo ug
+					ON u.usu_id = ug.usu_id
+				LEFT JOIN CORESSO..SYS_Grupo g
+					ON ug.gru_id = g.gru_id
+		WHERE 
+			g.sis_id = 204 AND
+			g.gru_situacao = 1 AND
+			u.usu_situacao = 1 AND
+			g.gru_nome = 'Aluno' AND
+			u.usu_login IN (SELECT CodigoAlunoRA FROm #Alunos)
+
+		SELECT * INTO #AlunosComUsuario FROM #Alunos
+		WHERE CodigoAlunoRA IN (SELECT usu_login FROM #Usuarios)
+		
+		DECLARE @CodigoALuno INT
+		DECLARE @CodigoAlunoRA VARCHAR(200)
+		DECLARE @NomeALuno VARCHAR(200)
+		DECLARE @DataNasCimento DATETIME
+		DECLARE @DataSituacao DATETIME
+		DECLARE @Pes_id UNIQUEIDENTIFIER
+		DECLARE @Usu_id UNIQUEIDENTIFIER
+		DECLARE @Senha VARCHAR(MAX)
+		DECLARE @DataMatricula DATETIME
+		DECLARE @NumeroDaChamada INT
+		DECLARE @QuantidadeDeMatriculas INT
+		
+		IF EXISTS (SELECT * FROM #AlunosComUsuario)
+		BEGIN
+			DECLARE Cursor_AlunosComUsuario CURSOR FOR 
+			SELECT CodigoAluno,CodigoAlunoRA, NomeALuno, DataNasCimento, DataSituacao, NumeroAlunoChamada
+				FROM #AlunosComUsuario
+			OPEN Cursor_AlunosComUsuario
+			
+			FETCH NEXT FROM Cursor_AlunosComUsuario INTO @CodigoALuno, @CodigoAlunoRA, @NomeALuno, @DataNasCimento, @DataSituacao, @NumeroDaChamada
+
+			WHILE @@FETCH_STATUS = 0  
+			BEGIN  
+				SET @Senha = (select [HASH] from SENHAHASH senhaHash WHERE senhaHash.SENHA = SUBSTRING(@CodigoAlunoRA,LEN(@CodigoAlunoRA)-3,4))
+				
+				SELECT @Pes_id = pes_id, @Usu_id = usu_id FROM CORESSO..SYS_Usuario WHERE usu_login = @CodigoAlunoRA AND usu_situacao = 1
+				
+				IF (@Usu_id IS NULL)
+				BEGIN
+					SET @Pes_id = NEWID()
+					SET @Usu_id = NEWID()
+					INSERT INTO CORESSO..PES_Pessoa (pes_id, pes_nome, pes_dataNascimento, pes_situacao, pes_dataCriacao, pes_dataAlteracao, pes_integridade)
+					VALUES (@pes_id, @NomeALuno, @DataNasCimento, 1, @DataDeCadastro, @DataDeCadastro, 0);
+			
+					INSERT INTO CORESSO..SYS_Usuario (usu_id, usu_login, usu_senha, usu_criptografia, usu_situacao, usu_dataCriacao, usu_dataAlteracao, pes_id, usu_integridade, ent_id, usu_integracaoAD, usu_dataAlteracaoSenha)
+					VALUES(@Usu_id, @CodigoAlunoRA, @Senha, 3, 1, @DataDeCadastro, @DataDeCadastro, @pes_id, 0, '6CF424DC-8EC3-E011-9B36-00155D033206', 0, @DataDeCadastro);
+			
+					INSERT INTO CORESSO..SYS_UsuarioGrupo (usu_id, gru_id, usg_situacao) VALUES(@Usu_id, (SELECT TOP 1 gru_id FROM CoreSSO..SYS_Grupo WHERE sis_id = 204 AND gru_situacao = 1 AND gru_nome = 'Aluno'), 1);
+				END
+				ELSE IF NOT EXISTS (SELECT 1 FROM CORESSO..SYS_UsuarioGrupo WHERE usu_id = @Usu_id and usg_situacao = 1)
+				BEGIN
+					INSERT INTO CORESSO..SYS_UsuarioGrupo (usu_id, gru_id, usg_situacao) VALUES(@Usu_id, (SELECT TOP 1 gru_id FROM CoreSSO..SYS_Grupo WHERE sis_id = 204 AND gru_situacao = 1 AND gru_nome = 'Aluno'), 1);
+				END
+				
+				IF OBJECT_ID('tempdb.dbo.#MatriculasDoALunoComUsuario', 'U') IS NOT NULL
+					DROP TABLE #MatriculasDoALunoComUsuario;
+				
+				SELECT CodigoDoAluno,DataStatusMatricula,SituacaoMatricula 
+					INTO #MatriculasDoALunoComUsuario
+				FROM BD_PRODAM..MatriculaDosALunosEjaEol
+				WHERE CodigoDoAluno = @CodigoALuno
+				
+				SET @DataMatricula = @DataSituacao
+				SET @QuantidadeDeMatriculas  = (SELECT COUNT(*) FROM #MatriculasDoALunoComUsuario)
+			
+				IF( @QuantidadeDeMatriculas= 1)
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoComUsuario)
+				ELSE IF(@QuantidadeDeMatriculas > 1 AND EXISTS (SELECT DataStatusMatricula FROM #MatriculasDoALunoComUsuario WHERE SituacaoMatricula = 1))
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoComUsuario WHERE SituacaoMatricula = 1  ORDER BY DataStatusMatricula DESC)
+				ELSE
+					SET @DataMatricula = (SELECT TOP 1 DataStatusMatricula FROM #MatriculasDoALunoComUsuario ORDER BY DataStatusMatricula DESC)
+				
+				EXEC [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT] @pes_id, @CodigoALuno, @NomeALuno, @NumeroDaChamada, @NumeroDaChamada,
+					@DataMatricula, @esc_codigo, @dc_turma_escola, @cal_id, @DataDeCadastro
+				
+				FETCH NEXT FROM Cursor_AlunosComUsuario INTO @CodigoALuno, @CodigoAlunoRA, @NomeALuno, @DataNasCimento, @DataSituacao, @NumeroDaChamada
+			END
+			CLOSE Cursor_AlunosComUsuario;
+			DEALLOCATE Cursor_AlunosComUsuario;	
+		END
+	END	
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:52 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT] 
+	@tur_id INT,
+	@cur_id INT,
+	@nr_ordem_serie INT,
+	@dc_serie_ensino varchar(50),
+	@DataDeCadastro DateTime,
+	@tcp_id INT
+AS
+BEGIN
+	IF EXISTS (select * from GestaoAvaliacao_SGP..TUR_TurmaCurriculo WHERE tur_id = @tur_id and cur_id = @cur_id and crp_id = @nr_ordem_serie and crr_id = 1 and tcp_id = @tcp_id)
+    BEGIN
+        UPDATE GestaoAvaliacao_SGP..TUR_TurmaCurriculo SET tcr_situacao = 1, tcr_dataAlteracao=@DataDeCadastro WHERE tur_id = @tur_id and cur_id = @cur_id and crp_id = @nr_ordem_serie and crr_id = 1 and tcp_id = @tcp_id
+    END
+    ELSE
+    BEGIN
+        INSERT INTO GestaoAvaliacao_SGP..TUR_TurmaCurriculo
+        SELECT DISTINCT @tur_id,
+                        @cur_id,
+                        1,
+                        @nr_ordem_serie,
+                        1,
+                        @DataDeCadastro,
+                        @DataDeCadastro,
+                        @tcp_id
+    END
+	
+END;
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:50 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT] 
+	@tur_id INT,
+	@cur_id INT,
+	@esc_codigo VARCHAR(50),
+	@descricaoModalidadeEnsino VARCHAR(100),
+	@AnoCalendario INT, 
+	@nr_ordem_etapa FLOAT, 
+	@nr_ordem_serie FLOAT, 
+	@DataDeCadastro DateTime
+AS
+BEGIN
+ 	IF ((SELECT COUNT(0)
+			FROM GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo ttcp
+				 INNER JOIN GestaoAvaliacao_SGP..ESC_Escola e
+					ON ttcp.esc_id = e.esc_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme
+		   ON ttcp.tme_id = tme.tme_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_TipoNivelEnsino tne
+		   ON ttcp.tne_id = tne.tne_id
+		WHERE ttcp.tur_id = @tur_id AND
+			   ttcp.cur_id = @cur_id AND
+			   tme.tme_nome = @descricaoModalidadeEnsino AND
+			   tne.tne_ordem = @nr_ordem_etapa AND
+			   ttcp.crp_ordem = @nr_ordem_serie AND
+			   e.esc_codigo = @esc_codigo) <= 0)
+    BEGIN
+		INSERT INTO GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo
+        SELECT @tur_id,
+        	    @cur_id,
+        	    tme.tme_id,
+        	    tne.tne_id,
+        	    @nr_ordem_serie,
+        	    1,
+        	    e.esc_id
+           FROM GestaoAvaliacao_SGP..ESC_Escola e,
+        		 GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme,
+        		 GestaoAvaliacao_SGP..ACA_TipoNivelEnsino tne
+        WHERE tme.tme_nome = @descricaoModalidadeEnsino AND
+        	   tne.tne_ordem = @nr_ordem_etapa AND
+        	   e.esc_codigo = @esc_codigo
+    END
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:48 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT] @esc_codigo VARCHAR(50), @AnoCalendario INT, @DataDeCadastro DateTime
+AS
+BEGIN
+	IF OBJECT_ID('tempdb.dbo.#calendario', 'U') IS NOT NULL
+	  DROP TABLE #calendario;
+	  
+	CREATE TABLE #calendario (cal_id INT)
+	
+	DECLARE @cd_escola float
+	DECLARE @cd_turma_escola int
+	DECLARE @dc_turma_escola varchar(50)
+	DECLARE @an_letivo float
+	DECLARE @dc_tipo_periodicidade varchar(50)
+	DECLARE @dc_tipo_turno varchar(50)
+	DECLARE @st_turma_escola varchar(50)
+	DECLARE @cd_tipo_turma float
+	DECLARE @dt_inicio_turma varchar(50)
+	DECLARE @dt_fim_turma varchar(50)
+	DECLARE @nr_ordem_serie float
+	DECLARE @cd_modalidade_ensino float
+	DECLARE @cd_etapa_ensino float
+	DECLARE @nr_ordem_etapa float
+	DECLARE @dc_serie_ensino varchar(50)
+	DECLARE @sg_modalidade_ensino varchar(50)
+	DECLARE @sg_tp_escola varchar(50)
+	DECLARE @tur_id INT
+	DECLARE @cal_id INT
+	DECLARE @cur_id INT
+	DECLARE @descricaoModalidadeEnsino VARCHAR(50)
+	DECLARE @tcp_id INT
+	DECLARE @SqlCalendarioAno VARCHAR(MAX) = '
+		INSERT INTO #calendario
+		SELECT TOP 1 cal_id as cal_id
+			FROM GestaoAvaliacao..SGP_ACA_CalendarioAnual
+		WHERE cal_ano = ''' + CONVERT(VARCHAR,@AnoCalendario)+ ''' AND
+			  cal_descricao LIKE ''%EJA%'' AND '
+   
+	DECLARE Cursor_Turmas_Da_Escola CURSOR FOR 
+		SELECT DISTINCT
+			[cd_escola]
+		   ,[cd_turma_escola]
+		   ,[dc_turma_escola]
+		   ,[an_letivo]
+		   ,[dc_tipo_periodicidade]
+		   ,[dc_tipo_turno]
+		   ,[st_turma_escola]
+		   ,[cd_tipo_turma]
+		   ,[dt_inicio_turma]
+		   ,[dt_fim_turma]
+		   ,[nr_ordem_serie]
+		   ,[cd_modalidade_ensino]
+		   ,[cd_etapa_ensino]
+		   ,[nr_ordem_etapa]
+		   ,[dc_serie_ensino]
+		   ,[sg_modalidade_ensino]
+		   ,[sg_tp_escola]
+		FROM BD_PRODAM..TurmasEjaEol t
+			INNER JOIN GestaoPedagogica..ESC_Escola e ON e.esc_codigo = t.cd_escola 
+		where cd_escola = @esc_codigo
+	OPEN Cursor_Turmas_Da_Escola
+
+	FETCH NEXT FROM Cursor_Turmas_Da_Escola INTO  @cd_escola,@cd_turma_escola
+		,@dc_turma_escola, @an_letivo, @dc_tipo_periodicidade, @dc_tipo_turno, @st_turma_escola, @cd_tipo_turma
+		,@dt_inicio_turma, @dt_fim_turma, @nr_ordem_serie, @cd_modalidade_ensino, @cd_etapa_ensino, @nr_ordem_etapa
+		,@dc_serie_ensino, @sg_modalidade_ensino, @sg_tp_escola 
+	
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN  
+		SET @tur_id = NULL;
+		SET @cur_id = NULL;
+		SET @tcp_id = NULL;
+		
+		DECLARE @SqlCalendarioFiltrado VARCHAR(MAX)
+		DELETE FROM #calendario
+        
+        IF (@dc_tipo_periodicidade LIKE '%SEMESTRAL%' AND @dc_tipo_periodicidade LIKE '%1º SEMESTRE%')
+			SET @SqlCalendarioFiltrado = @SqlCalendarioAno + ' cal_descricao LIKE ''%1° Semestre%'' ';
+		else if (@dc_tipo_periodicidade LIKE '%SEMESTRAL%' AND @dc_tipo_periodicidade LIKE '%2º SEMESTRE%')
+			SET @SqlCalendarioFiltrado = @SqlCalendarioAno + ' cal_descricao LIKE ''%2° Semestre%'' ';
+		ELSE
+			SET @SqlCalendarioFiltrado = @SqlCalendarioAno + 'cal_descricao NOT LIKE ''%1° Semestre%'' AND cal_descricao NOT LIKE ''%2° Semestre%'''
+        
+        EXEC(@SqlCalendarioFiltrado)
+        
+        SELECT TOP 1 @cal_id = cal_id FROM #calendario
+        
+        SELECT TOP 1 @tur_id = t.tur_id
+        	FROM GestaoAvaliacao..SGP_TUR_Turma t
+        		INNER JOIN GestaoAvaliacao..SGP_ESC_Escola e
+        			ON t.esc_id = e.esc_id
+        		INNER JOIN GestaoAvaliacao..SGP_ACA_TipoTurno tt
+        			ON t.ttn_id = tt.ttn_id
+        WHERE e.esc_codigo = @esc_codigo AND
+        	   t.tur_tipo = @cd_tipo_turma AND
+        	   t.cal_id = @cal_id AND
+        	   tt.ttn_nome = @dc_tipo_turno AND
+        	   t.tur_codigo = 'EJA-'+@dc_turma_escola
+        
+        IF(@tur_id IS NULL)
+        BEGIN
+			SET @tur_id = (SELECT TOP 1 tur_id FROM GestaoAvaliacao_SGP..TUR_Turma ORDER BY tur_id DESC) + 1
+			INSERT INTO GestaoAvaliacao_SGP..TUR_Turma
+			SELECT DISTINCT @tur_id,
+				             esc_id,
+				             'EJA-'+@dc_turma_escola,
+				             NULL,
+				             @cal_id,
+				             tt.ttn_id,
+				             1,
+				             @DataDeCadastro,
+				             @DataDeCadastro,
+				             1
+				FROM GestaoAvaliacao_SGP..ESC_Escola e,
+					 GestaoAvaliacao_SGP..ACA_TipoTurno tt
+			WHERE e.esc_codigo = @esc_codigo AND
+				   tt.ttn_nome = @dc_tipo_turno
+        END
+        ELSE
+        BEGIN
+			UPDATE GestaoAvaliacao_SGP..TUR_Turma SET tur_situacao = 1 WHERE tur_id = @tur_id
+        END
+   
+		EXEC [dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT] @AnoCalendario, @cd_etapa_ensino, @dc_serie_ensino, @nr_ordem_etapa, @nr_ordem_serie, @DataDeCadastro, 
+			@cur_id OUTPUT, @descricaoModalidadeEnsino OUTPUT
+        
+        EXEC [dbo].[GestaoAvaliacao_TurmaTipoCurriculoPeriodoEjaECiejaEol_IMPORT] @tur_id, @cur_id, @esc_codigo, @descricaoModalidadeEnsino, @AnoCalendario,
+			@nr_ordem_etapa, @nr_ordem_serie, @DataDeCadastro
+			
+		EXEC [dbo].[GestaoAvaliacao_AcaTipoCurriculoPeriodoEjaECiejaEol_IMPORT] @descricaoModalidadeEnsino, @dc_serie_ensino, @nr_ordem_etapa, @nr_ordem_serie,
+			@DataDeCadastro, @tcp_id OUTPUT
+			
+		EXEC [dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT] @dc_serie_ensino, @DataDeCadastro, @tcp_id
+			
+		EXEC [dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT] @descricaoModalidadeEnsino, @cur_id, @DataDeCadastro
+			
+		EXEC [dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT] @cur_id, @nr_ordem_serie, @dc_serie_ensino,
+			@DataDeCadastro, @tcp_id
+			
+		EXEC [dbo].[GestaoAvaliacao_TurTurmaCurriculoEjaECiejaEol_IMPORT] @tur_id, @cur_id, @nr_ordem_serie, @dc_serie_ensino, @DataDeCadastro, @tcp_id
+		
+		EXEC [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDosAlunosASeremIncluidosEjaECiejaEol_IMPORT] @esc_codigo, @dc_turma_escola, @cal_id, @cd_turma_escola, @DataDeCadastro
+		
+		EXEC [dbo].[GestaoAvaliacao_UsuarioAlunoEMatriculaDeAlunosComUsuarioEjaECiejaEol_IMPORT]  @esc_codigo, @dc_turma_escola, @cal_id, @cd_turma_escola, @DataDeCadastro
+			
+		FETCH NEXT FROM Cursor_Turmas_Da_Escola INTO @cd_escola,@cd_turma_escola
+		,@dc_turma_escola, @an_letivo, @dc_tipo_periodicidade, @dc_tipo_turno, @st_turma_escola, @cd_tipo_turma
+		,@dt_inicio_turma, @dt_fim_turma, @nr_ordem_serie, @cd_modalidade_ensino, @cd_etapa_ensino, @nr_ordem_etapa
+		,@dc_serie_ensino, @sg_modalidade_ensino, @sg_tp_escola 
+	END
+	CLOSE Cursor_Turmas_Da_Escola;
+	DEALLOCATE Cursor_Turmas_Da_Escola;
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:46 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_TestTypeCourseEjaECiejaEol_IMPORT] 
+	@descricaoModalidadeEnsino VARCHAR(100),
+	@cur_id INT,
+	@DataDeCadastro DateTime
+AS
+BEGIN
+	INSERT INTO GestaoAvaliacao..TestTypeCourse
+	SELECT DISTINCT @cur_id,
+					@DataDeCadastro,
+					@DataDeCadastro,
+					1,
+					21,
+					tme.tme_id
+	FROM GestaoAvaliacao_SGP.dbo.ACA_TipoModalidadeEnsino tme (NOLOCK)
+	WHERE tme.tme_nome = @descricaoModalidadeEnsino AND
+	NOT EXISTS (SELECT Id
+				    FROM GestaoAvaliacao..TestTypeCourse
+				WHERE CourseId = @cur_id AND
+					  TestType_Id = 21 AND
+					  ModalityId = tme.tme_id)
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:44 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_TestCurriculumGradeEjaECiejaEol_IMPORT] 
+	@dc_serie_ensino VARCHAR(100),
+	@DataDeCadastro DateTime,
+	@tcp_id INT
+AS
+BEGIN
+	DECLARE @Test_Id INT
+	DECLARE @description VARCHAR(250)
+
+	IF(@dc_serie_ensino='EJA BASICA II' OR @dc_serie_ensino='2ª EJA MODULAR' OR @dc_serie_ensino='M II')
+	BEGIN
+		DECLARE Cursor_TestCurriculumGrade CURSOR FOR 
+		SELECT Id,
+			   [Description]
+			FROM GestaoAvaliacao..Test
+		WHERE TestType_Id = 21 and 
+			  ApplicationEndDate > GETDATE() 
+		OPEN Cursor_TestCurriculumGrade
+		
+		FETCH NEXT FROM Cursor_TestCurriculumGrade INTO @Test_Id, @description
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN  
+			IF(@description LIKE 'BÁSICA2%' OR @description like 'BASICA2%')
+			BEGIN
+				INSERT INTO GestaoAvaliacao..TestCurriculumGrade
+				SELECT DISTINCT @tcp_id,
+								@DataDeCadastro,
+								@DataDeCadastro,
+								1,
+								@Test_Id
+				WHERE NOT EXISTS (SELECT Id
+									FROM GestaoAvaliacao..TestCurriculumGrade
+								  WHERE TypeCurriculumGradeId = @tcp_id AND
+										Test_Id = @Test_Id)
+			END
+			
+			FETCH NEXT FROM Cursor_TestCurriculumGrade INTO @Test_Id, @description
+		END
+		CLOSE Cursor_TestCurriculumGrade;
+		DEALLOCATE Cursor_TestCurriculumGrade;
+	END
+	ELSE IF(@dc_serie_ensino='EJA FINAL II' OR @dc_serie_ensino='4ª EJA MODULAR' OR @dc_serie_ensino='M IV')
+	BEGIN
+		DECLARE Cursor_TestCurriculumGrade CURSOR FOR 
+		SELECT Id,
+			   [Description]
+			FROM GestaoAvaliacao..Test
+		WHERE TestType_Id = 21 and 
+			  ApplicationEndDate > GETDATE() 
+		OPEN Cursor_TestCurriculumGrade
+		
+		FETCH NEXT FROM Cursor_TestCurriculumGrade INTO @Test_Id, @description
+
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN  
+			IF(@description NOT LIKE 'BÁSICA2%' AND @description NOT LIKE 'BASICA2%')
+			BEGIN
+				INSERT INTO GestaoAvaliacao..TestCurriculumGrade
+				SELECT DISTINCT @tcp_id,
+								@DataDeCadastro,
+								@DataDeCadastro,
+								1,
+								@Test_Id
+				WHERE NOT EXISTS (SELECT Id
+									FROM GestaoAvaliacao..TestCurriculumGrade
+								  WHERE TypeCurriculumGradeId = @tcp_id AND
+										Test_Id = @Test_Id)
+			END
+			
+			FETCH NEXT FROM Cursor_TestCurriculumGrade INTO @Test_Id, @description
+		END
+		CLOSE Cursor_TestCurriculumGrade;
+		DEALLOCATE Cursor_TestCurriculumGrade;
+	END
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:42 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_MatriculasEjaECiejaEol_IMPORT]
+	@pes_id UNIQUEIDENTIFIER,
+	@alu_matricula INT,
+	@alu_nome VARCHAR(200),
+	@cur_id INT,
+	@mtu_numeroChamada INT,
+	@mtu_dataMtricula DATETIME,
+	@esc_codigo VARCHAR(50),
+	@tur_codigo VARCHAR(100),
+	@cal_id INT,
+	@DataDeCadastro DateTime
+AS
+BEGIN
+	DECLARE @alu_id BIGINT = (SELECT MAX(alu_id) FROM GestaoAvaliacao_SGP..ACA_Aluno WHERE pes_id = @pes_id and alu_situacao = 1)
+	PRINT '@@DataDeCadastro' +CONVERT(VARCHAR,@DataDeCadastro)
+	IF (@alu_id IS NULL)
+	BEGIN
+		SET @alu_id = (SELECT TOP 1 alu_id FROM GestaoAvaliacao_SGP..ACA_Aluno ORDER BY alu_id DESC) + 1
+	    
+		INSERT INTO GestaoAvaliacao_SGP..ACA_Aluno
+		SELECT DISTINCT @alu_id,
+			@alu_nome,
+			'6CF424DC-8EC3-E011-9B36-00155D033206',
+			@alu_matricula,
+			@DataDeCadastro,
+			@DataDeCadastro,
+			1,
+			NULL,
+			NULL,
+			@pes_id
+	                        
+		INSERT INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma
+		SELECT TOP 1 @alu_id,
+			(select ISNULL(MAX(mtu_id),0) + 1 from GestaoAvaliacao_SGP..MTR_MatriculaTurma where alu_id = @alu_id),
+			e.esc_id,
+			t.tur_id,
+			@cur_id,
+			1,
+			tc.crp_id,
+			1,
+			@DataDeCadastro,
+			@DataDeCadastro,
+			@mtu_numeroChamada,
+			@mtu_dataMtricula,
+			NULL,
+			tc.tcp_id
+		FROM GestaoAvaliacao_SGP..ESC_Escola e,
+			GestaoAvaliacao_SGP..TUR_Turma t,
+			GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
+		WHERE e.esc_codigo = @esc_codigo AND
+				t.tur_codigo = 'EJA-'+@tur_codigo AND
+				tc.cur_id = @cur_id AND
+				t.esc_id = e.esc_id AND
+				t.tur_id = tc.tur_id AND
+				t.cal_id = @cal_id 
+		ORDER BY t.tur_id                                            
+	END
+	ELSE
+	BEGIN
+		IF NOT EXISTS(SELECT top 1 mat.alu_id from GestaoAvaliacao_SGP..MTR_MatriculaTurma mat
+            INNER JOIN GestaoAvaliacao_SGP..ESC_Escola e ON e.esc_id = mat.esc_id
+            INNER JOIN GestaoAvaliacao_SGP..TUR_Turma t ON t.esc_id = e.esc_id and mat.tur_id = t.tur_id
+            INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+            WHERE e.esc_codigo = @esc_codigo AND
+                    t.tur_codigo = 'EJA-'+@tur_codigo AND
+                    tc.cur_id = @cur_id AND
+                    t.cal_id = @cal_id AND
+                    mat.alu_id = @alu_id)
+        BEGIN
+			INSERT INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma
+			SELECT TOP 1 @alu_id,
+				(select ISNULL(MAX(mtu_id),0) + 1 from GestaoAvaliacao_SGP..MTR_MatriculaTurma where alu_id = @alu_id),
+				e.esc_id,
+				t.tur_id,
+				@cur_id,
+				1,
+				tc.crp_id,
+				1,
+				@DataDeCadastro,
+				@DataDeCadastro,
+				@mtu_numeroChamada,
+				@mtu_dataMtricula,
+				NULL,
+				tc.tcp_id
+			FROM GestaoAvaliacao_SGP..ESC_Escola e,
+				GestaoAvaliacao_SGP..TUR_Turma t,
+				GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
+			WHERE e.esc_codigo = @esc_codigo AND
+					t.tur_codigo = 'EJA-'+@tur_codigo AND
+					tc.cur_id = @cur_id AND
+					t.esc_id = e.esc_id AND
+					t.tur_id = tc.tur_id AND
+					t.cal_id = @cal_id 
+			ORDER BY t.tur_id  
+        END
+        ELSE
+        BEGIN
+            UPDATE mat SET mat.mtu_situacao = 1, mat.mtu_dataCriacao = @DataDeCadastro, mat.mtu_dataAlteracao = @DataDeCadastro
+            FROM GestaoAvaliacao_SGP..MTR_MatriculaTurmaMTR_MatriculaTurma mat
+                INNER JOIN GestaoAvaliacao_SGP..ESC_Escola e ON e.esc_id = mat.esc_id
+                INNER JOIN GestaoAvaliacao_SGP..TUR_Turma t ON t.esc_id = e.esc_id and mat.tur_id = t.tur_id
+                INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+            WHERE e.esc_codigo = @esc_codigo AND
+                t.tur_codigo = 'EJA-'+@tur_codigo AND
+                tc.cur_id = @cur_id AND
+                t.cal_id = @cal_id AND
+                mat.alu_id = @alu_id
+        END
+	END
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_EjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:41 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_EjaECiejaEol_IMPORT]
+AS
+BEGIN
+	IF OBJECT_ID('tempdb.dbo.#Escolas', 'U') IS NOT NULL
+	  DROP TABLE #Escolas; 
+
+	SELECT e.esc_codigo,ec.tce_id INTO #Escolas
+		FROM GestaoPedagogica..ESC_Escola e
+			INNER JOIN GestaoPedagogica..ESC_EscolaClassificacao ec
+				ON e.esc_id = ec.esc_id
+	WHERE e.esc_situacao = 1
+	ORDER BY e.esc_id
+
+	DECLARE @EscCodigo AS VARCHAR(50)
+	DECLARE @AnoCalendario INT
+	DECLARE @DataDeCadastro DATETIME = GETDATE()
+	SELECT @AnoCalendario = YEAR(@DataDeCadastro)
+	
+	DECLARE Cursor_Escolas CURSOR FOR 
+	SELECT esc_codigo FROM #Escolas
+	OPEN Cursor_Escolas
+
+	FETCH NEXT FROM Cursor_Escolas INTO  @EscCodigo
+
+	WHILE @@FETCH_STATUS = 0  
+	BEGIN  
+		EXEC dbo.GestaoAvaliacao_TurmasEOutrosVinculosEjaECiejaEol_IMPORT @EscCodigo, @AnoCalendario, @DataDeCadastro;
+		
+		FETCH NEXT FROM Cursor_Escolas INTO @EscCodigo
+	END
+	CLOSE Cursor_Escolas;
+	DEALLOCATE Cursor_Escolas;
+
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_ACATipoCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:39 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_ACATipoCurriculoPeriodoEjaECiejaEol_IMPORT] 
+	@descricaoModalidadeEnsino VARCHAR(100),
+	@dc_serie_ensino VARCHAR(100),
+	@nr_ordem_etapa FLOAT, 
+	@nr_ordem_serie FLOAT, 
+	@DataDeCadastro DateTime,
+	@tcp_id INT OUTPUT
+AS
+BEGIN
+	
+	SELECT TOP 1 @tcp_id = tpcp.tcp_id
+		FROM GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo tpcp
+			INNER JOIN GestaoAvaliacao_SGP..ACA_TipoNivelEnsino tne
+				ON tpcp.tne_id = tne.tne_id
+			INNER JOIN GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme
+				ON tpcp.tme_id = tme.tme_id
+	WHERE tne.tne_ordem = @nr_ordem_etapa AND
+		   tme.tme_nome = @descricaoModalidadeEnsino AND
+		   tpcp.tcp_ordem = @nr_ordem_serie AND
+		   tpcp.tcp_descricao = @dc_serie_ensino
+	
+	IF (@tcp_id IS NULL)
+	BEGIN
+		SET @tcp_id = (SELECT TOP 1 tcp_id FROM GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo ORDER BY tcp_id DESC) + 1
+		INSERT INTO GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo
+		SELECT @tcp_id,
+    			tne.tne_id,
+    			tme.tme_id,
+    			@dc_serie_ensino,
+    			@nr_ordem_serie,
+    			1,
+    			@DataDeCadastro,
+    			@DataDeCadastro
+    		FROM GestaoAvaliacao_SGP..ACA_TipoNivelEnsino tne,
+    			 GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme
+		WHERE tne.tne_nome like '%EJA%' AND
+			  tne.tne_ordem = @nr_ordem_etapa AND
+    		   tme.tme_nome = @descricaoModalidadeEnsino
+	END
+ 
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:37 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_AcaCursoEjaECiejaEol_IMPORT] 
+	@AnoCalendario INT, 
+	@cd_etapa_ensino VARCHAR(100), 
+	@dc_serie_ensino VARCHAR(100), 
+	@nr_ordem_etapa FLOAT, 
+	@nr_ordem_serie FLOAT, 
+	@DataDeCadastro DateTime,
+	@cur_id INT OUTPUT,
+	@descricaoModalidadeEnsino VARCHAR(50) OUTPUT
+AS
+BEGIN
+	SET @descricaoModalidadeEnsino = 'CIEJA'
+	DECLARE @nomeCurso VARCHAR(100)
+	DECLARE @nomeCursoAbreviado VARCHAR(100)
+	
+	IF (@cd_etapa_ensino = 3 AND @dc_serie_ensino LIKE '%MODULAR%')
+        SET @descricaoModalidadeEnsino = 'EJA Modular';
+        
+    IF (@cd_etapa_ensino = 3 AND @dc_serie_ensino NOT LIKE '%MODULAR%')
+        SET  @descricaoModalidadeEnsino = 'EJA Regular';
+    ELSE IF (@cd_etapa_ensino = 11)
+        SET @descricaoModalidadeEnsino = 'EJA Especial';
+
+	SELECT TOP 1 @cur_id = c.cur_id
+    	FROM GestaoAvaliacao_SGP..ACA_Curso c
+    		INNER JOIN GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme
+    			ON c.tme_id = tme.tme_id
+    WHERE c.cur_nome LIKE '%EJA%' AND
+    	   c.cur_nome LIKE '%'+ CONVERT(VARCHAR,@AnoCalendario) + '%' AND
+    	   c.cur_codigo = @cd_etapa_ensino AND
+    	   tme.tme_nome = @descricaoModalidadeEnsino
+    
+    IF (@cur_id IS NULL)
+    BEGIN
+		IF(@nr_ordem_etapa = 7)
+		BEGIN
+			SET @nomeCurso = CONVERT(VARCHAR,@AnoCalendario) +' - EJA Modular'
+			SET @nomeCursoAbreviado =CONVERT(VARCHAR,@AnoCalendario) +' - EJA MOD'
+		END
+		BEGIN
+			SET @nomeCurso = CONVERT(VARCHAR,@AnoCalendario) +' - EJA CIEJA'
+			SET @nomeCursoAbreviado = CONVERT(VARCHAR,@AnoCalendario) +' - CIEJA'
+		END
+	
+		SET @cur_id  = (SELECT TOP 1 cur_id FROM GestaoAvaliacao_SGP..ACA_Curso ORDER BY cur_id DESC) + 1
+
+		INSERT INTO GestaoAvaliacao_SGP..ACA_Curso
+		SELECT @cur_id,
+    			'6CF424DC-8EC3-E011-9B36-00155D033206',
+    			tne.tne_id,
+    			tme.tme_id,
+    			@cd_etapa_ensino,
+    			@nomeCurso,
+    			@nomeCursoAbreviado,
+    			1,
+    			@DataDeCadastro,
+    			@DataDeCadastro
+    		FROM GestaoAvaliacao_SGP..ACA_TipoNivelEnsino tne, 
+    			 GestaoAvaliacao_SGP..ACA_TipoModalidadeEnsino tme
+		WHERE tne.tne_ordem = @nr_ordem_serie AND
+			  tme.tme_nome = @descricaoModalidadeEnsino
+    END
+END
+GO
+
+/****** Object:  StoredProcedure [dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT]    Script Date: 09/08/2020 07:40:33 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GestaoAvaliacao_AcaCurriculoEAcaCurriculoPeriodoEjaECiejaEol_IMPORT] 
+	@cur_id INT,
+	@nr_ordem_serie FLOAT,
+	@dc_serie_ensino varchar(50),
+	@DataDeCadastro DateTime,
+	@tcp_id INT
+AS
+BEGIN
+	IF EXISTS (SELECT cur_id FROM GestaoAvaliacao_SGP..ACA_Curriculo WHERE cur_id = @cur_id AND crr_id = 1)
+	BEGIN
+		UPDATE GestaoAvaliacao_SGP..ACA_Curriculo SET crr_situacao = 1, crr_dataAlteracao = @DataDeCadastro  WHERE cur_id = @cur_id AND crr_id = 1
+	END
+	ELSE
+	BEGIN  
+		INSERT INTO GestaoAvaliacao_SGP..ACA_Curriculo
+		SELECT DISTINCT @cur_id,
+			1,
+			NULL,
+			1,
+			@DataDeCadastro,
+			@DataDeCadastro
+	END      
+
+	IF EXISTS (SELECT cur_id FROM GestaoAvaliacao_SGP..ACA_CurriculoPeriodo 
+		WHERE cur_id = @cur_id AND crr_id = 1 AND crp_id = @nr_ordem_serie AND crp_ordem = @nr_ordem_serie AND tcp_id = @tcp_id)
+	BEGIN
+		UPDATE GestaoAvaliacao_SGP..ACA_CurriculoPeriodo SET crp_situacao = 1
+		WHERE cur_id = @cur_id AND crr_id = 1 AND crp_id = @nr_ordem_serie AND crp_ordem = @nr_ordem_serie AND tcp_id = @tcp_id
+	END
+	ELSE
+	BEGIN   
+		INSERT INTO GestaoAvaliacao_SGP..ACA_CurriculoPeriodo
+		SELECT @cur_id,
+			1,
+			@nr_ordem_serie,
+			@nr_ordem_serie,
+			@dc_serie_ensino,
+			1,
+			@DataDeCadastro,
+			@DataDeCadastro,
+			@tcp_id
+	END 
+	
+END
+GO
+
 
 /****** Object:  StoredProcedure [dbo].[STP_GestaoEscolarBiblioteca_Usuario_IMPORT]    Script Date: 05/12/2014 10:35:17 ******/
 SET ANSI_NULLS ON
