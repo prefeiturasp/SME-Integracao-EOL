@@ -5437,7 +5437,6 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate());
     
-	PRINT 'Aca_CURRICULO';
     
 	WITH CteCurriculo AS (
 		SELECT ac.* from GestaoAvaliacao_SGP..ACA_Curriculo ac   
@@ -5489,7 +5488,6 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate());
     
-	PRINT 'ACA_CurriculoPeriodo';
     
 	WITH CteCurriculoPeriodo AS (
 		select crp.* from GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
@@ -5960,8 +5958,6 @@ BEGIN
     WHEN NOT MATCHED BY SOURCE AND Destino.tdt_situacao <> 3 THEN
          UPDATE SET tdt_situacao = 3,
                     tdt_dataAlteracao = GETDATE();
-
-	PRINT 'TUR_TurmaTipoCurriculoPeriodo';
 					
 	WITH CteTurmaTipoCurriculoPeriodo AS (
 		SELECT * FROM GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo
