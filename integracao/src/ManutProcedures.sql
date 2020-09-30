@@ -5645,8 +5645,6 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate());
     
-	PRINT 'TUR_TurmaCurriculo';
-    
 	WITH CteTurmaCurriculo AS (
 		Select tc.* from GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
 		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
@@ -5766,7 +5764,6 @@ BEGIN
 	DECLARE @DataAlteracaoMatriculaTurma DATETIME
 	SET @DataAlteracaoMatriculaTurma = GETDATE()
 
-	PRINT 'MTR_MatriculaTurma'
     -- MTR_MatriculaTurma
      MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
     USING (select alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
