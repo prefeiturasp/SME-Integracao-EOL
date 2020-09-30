@@ -5106,8 +5106,6 @@ BEGIN
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate());
-
-	PRINT 'TUR_TURMA';
 	
 	WITH CteDestinationTurma AS (
 		Select * from GestaoAvaliacao_SGP..TUR_Turma
@@ -5206,8 +5204,6 @@ BEGIN
 		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = tc.cur_id 
 	WHERE c.tme_id IN (4,6,7,8)
 	GROUP BY mt.alu_id;
-
-	PRINT 'ACA_Aluno';
 
 	WITH CteAlunoParaMerge AS 
 	(
@@ -5345,8 +5341,7 @@ BEGIN
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_TipoCurriculoPeriodo', @SourceID, getdate())
-    
-    PRINT 'ACA_TipoCurriculoPeriodo'
+
     -- ACA_TipoCurriculoPeriodo
     MERGE INTO GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo Destino
     USING (select tcp_id, tne_id, tme_id, tcp_descricao, tcp_ordem, tcp_situacao, tcp_dataCriacao, tcp_dataAlteracao
@@ -5387,8 +5382,7 @@ BEGIN
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Curso', @SourceID, getdate())
-    
-    PRINT 'ACA_CURSO'
+
     -- ACA_Curso
     MERGE INTO GestaoAvaliacao_SGP..ACA_Curso Destino
     USING (select cur.cur_id, cur.ent_id, cur.tne_id, cur.tme_id, cur.cur_codigo, cur.cur_nome, cur.cur_nome_abreviado,
