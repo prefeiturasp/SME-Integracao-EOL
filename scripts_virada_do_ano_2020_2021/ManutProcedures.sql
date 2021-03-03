@@ -3247,22 +3247,22 @@ BEGIN
 		   
 	 CREATE TABLE #INSERIR (alu_id int, mtu_id int, controle int)
 
-	 while exists (select mtu.alu_id, mtu.mtu_id
-					 from GE_ACA_AlunoCurriculo alc
-						  inner join GE_MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-						  inner join GE_TUR_Turma tur on tur.tur_id = mtu.tur_id 
-						  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-				    where alc_situacao <> 3
-					  and mtu_situacao <> 3
-					  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletim mb 
-						   	  		   where mb.alu_id = mtu.alu_id
-						   	  		   and mb.mtu_origemDados = mtu.mtu_id)
-					 group by mtu.alu_id, mtu.mtu_id)
+	 --while exists (select mtu.alu_id, mtu.mtu_id
+		--			 from GE_ACA_AlunoCurriculo alc
+		--				  inner join GE_MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
+		--				  inner join GE_TUR_Turma tur on tur.tur_id = mtu.tur_id 
+		--				  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
+		--		    where alc_situacao <> 3
+		--			  and mtu_situacao <> 3
+		--			  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletim mb 
+		--				   	  		   where mb.alu_id = mtu.alu_id
+		--				   	  		   and mb.mtu_origemDados = mtu.mtu_id)
+		--			 group by mtu.alu_id, mtu.mtu_id)
 	 begin
 	 delete from #INSERIR
 
 	 insert into #INSERIR
-	 select top 100000 alu_id, mtu_id, 0
+	 select alu_id, mtu_id, 0
 	   from (select mtu.alu_id, mtu.mtu_id 
 			   from GE_ACA_AlunoCurriculo alc
 				    inner join GE_MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
@@ -3322,27 +3322,27 @@ BEGIN
 
 	 CREATE TABLE #INSERIR2 (alu_id int, mtu_id int, controle int)
 
-	 while exists (select mtu.alu_id, mtu.mtu_id
-					 from GestaoPedagogica..ACA_AlunoCurriculo alc
-						  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
-						  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
-						  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
-						  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
-								  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
-							     and mb.mtu_id is not null
-						  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
-																			  and mtu2.cur_id not in (143,144) --cursos sem TUD E MTD
-				    where alc.alc_situacao <> 3
-					  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
-					  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
-						   	  		   where mb.alu_id = mtu.alu_id
-						   	  		     and mb.mtu_origemDados = mtu.mtu_id)
-					 group by mtu.alu_id, mtu.mtu_id)
+	 --while exists (select mtu.alu_id, mtu.mtu_id
+		--			 from GestaoPedagogica..ACA_AlunoCurriculo alc
+		--				  inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
+		--				  inner join GestaoPedagogica..TUR_Turma tur on tur.tur_id = mtu.tur_id 
+		--				  inner join GE_ACA_CalendarioAnual cal on cal.cal_id = tur.cal_id and cal.cal_ano = (select valor from Manutencao.._parametros where chave = 'ANO_BASE')
+		--				  inner join GestaoPedagogica..MTR_MatriculasBoletim mb 
+		--						  on mb.alu_id = mtu.alu_id and mb.mtu_origemDados = mtu.mtu_id
+		--					     and mb.mtu_id is not null
+		--				  INNER JOIN GestaoPedagogica..MTR_MatriculaTurma mtu2 on mtu2.alu_id = alc.alu_id and mtu2.mtu_id = mb.mtu_id
+		--																	  and mtu2.cur_id not in (143,144) --cursos sem TUD E MTD
+		--		    where alc.alc_situacao <> 3
+		--			  and mtu.mtu_situacao <> 3 --and alc.esc_id between 500 and 600
+		--			  and not exists (select mb.alu_id from GestaoPedagogica..MTR_MatriculasBoletimDisciplina mb 
+		--				   	  		   where mb.alu_id = mtu.alu_id
+		--				   	  		     and mb.mtu_origemDados = mtu.mtu_id)
+		--			 group by mtu.alu_id, mtu.mtu_id)
 	 begin
 	 truncate table #INSERIR2
 
 	 insert into #INSERIR2
-	 select top 10000 alu_id, mtu_id, 0
+	 select  alu_id, mtu_id, 0
 	   from (select mtu.alu_id, mtu.mtu_id 
 			   from GestaoPedagogica..ACA_AlunoCurriculo alc
 				    inner join GestaoPedagogica..MTR_MatriculaTurma mtu on mtu.alu_id = alc.alu_id and mtu.alc_id = alc.alc_id
@@ -4836,6 +4836,13 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+USE [Manutencao]
+GO
+/****** Object:  StoredProcedure [dbo].[STP_GestaoAvaliacao_Import]    Script Date: 20/01/2021 18:24:30 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE [dbo].[STP_GestaoAvaliacao_Import]
 AS
 BEGIN
@@ -5046,10 +5053,22 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate())
-    
+         VALUES (@PackageLogID, 'TUR_Turma', @SourceID, getdate());
+
+	PRINT 'TUR_TURMA';
+	
+	WITH CteDestinationTurma AS (
+		Select * from GestaoAvaliacao_SGP..TUR_Turma
+		WHERE tur_id IN ( 
+			Select t.tur_id from GestaoAvaliacao_SGP..TUR_Turma t 
+			INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = t.tur_id
+			INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+			where c.tme_id NOT IN (4,6,7,8)
+		)
+	)
+		
 	-- TUR_Turma
-    MERGE INTO GestaoAvaliacao_SGP..TUR_Turma Destino
+    MERGE INTO CteDestinationTurma Destino
     USING (select tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo
              from GestaoPedagogica..TUR_Turma tur with (nolock)
@@ -5061,6 +5080,8 @@ BEGIN
                   on tur.esc_id = esc.esc_id
                   inner join GestaoAvaliacao_SGP..ACA_CalendarioAnual cal
                   on tur.cal_id = cal.cal_id
+				  INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc ON tc.tur_id = tur.tur_id
+			      INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id
             where tur.tur_situacao <> 3
               and trn.trn_situacao <> 3
               and ttn.ttn_situacao <> 3
@@ -5070,6 +5091,7 @@ BEGIN
               and cal.ent_id = @ent_id
               and cal.cal_situacao <> 3
 			  and tur_tipo = 1
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tur.esc_id, tur.tur_codigo, tur.tur_descricao, tur.cal_id, trn.ttn_id,
                   tur.tur_situacao, tur.tur_dataCriacao, tur.tur_dataAlteracao, tur.tur_tipo) Origem
     ON Destino.tur_id = Origem.tur_id
@@ -5125,8 +5147,25 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Aluno', @SourceID, getdate())
     
+	SELECT mt.alu_id INTO #CteIdDosAlunosDoEjaeCieja 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mt WITH (NOLOCK)
+		INNER JOIN GestaoAvaliacao_SGP..TUR_Turma t WITH (NOLOCK) ON mt.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc WITH (NOLOCK) ON tc.tur_id = t.tur_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = tc.cur_id 
+	WHERE c.tme_id IN (4,6,7,8)
+	GROUP BY mt.alu_id;
+
+	PRINT 'ACA_Aluno';
+
+	WITH CteAlunoParaMerge AS 
+	(
+		SELECT aluno.*
+			FROM GestaoAvaliacao_SGP..ACA_Aluno aluno WITH (NOLOCK)
+		WHERE aluno.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
+	)
+	
     -- ACA_Aluno
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Aluno Destino
+    MERGE INTO CteAlunoParaMerge Destino
     USING (select alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao
              from GestaoPedagogica..ACA_Aluno alu with (nolock)
@@ -5140,6 +5179,7 @@ BEGIN
             where alu.ent_id = @ent_id
               and alu.alu_situacao <> 3
               and pes.pes_situacao <> 3
+			  and alu.alu_id NOT IN ( SELECT alu_id FROM #CteIdDosAlunosDoEjaeCieja )
             group by alu.alu_id, alu.pes_id, pes.pes_nome, alu.ent_id, alc.alc_matricula,
                   alu.alu_dataCriacao, alu.alu_dataAlteracao, alu.alu_situacao) Origem
     ON Destino.alu_id = Origem.alu_id
@@ -5254,6 +5294,7 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_TipoCurriculoPeriodo', @SourceID, getdate())
     
+    PRINT 'ACA_TipoCurriculoPeriodo'
     -- ACA_TipoCurriculoPeriodo
     MERGE INTO GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo Destino
     USING (select tcp_id, tne_id, tme_id, tcp_descricao, tcp_ordem, tcp_situacao, tcp_dataCriacao, tcp_dataAlteracao
@@ -5275,7 +5316,7 @@ BEGIN
          INSERT (tcp_id, tne_id, tme_id, tcp_descricao, tcp_ordem, tcp_situacao, tcp_dataCriacao, tcp_dataAlteracao)
          VALUES (Origem.tcp_id, Origem.tne_id, Origem.tme_id, Origem.tcp_descricao, Origem.tcp_ordem,
                  Origem.tcp_situacao, Origem.tcp_dataCriacao, Origem.tcp_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.tcp_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET tcp_situacao = 3,
                     tcp_dataAlteracao = GETDATE();
     
@@ -5295,6 +5336,7 @@ BEGIN
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
          VALUES (@PackageLogID, 'ACA_Curso', @SourceID, getdate())
     
+    PRINT 'ACA_CURSO'
     -- ACA_Curso
     MERGE INTO GestaoAvaliacao_SGP..ACA_Curso Destino
     USING (select cur.cur_id, cur.ent_id, cur.tne_id, cur.tme_id, cur.cur_codigo, cur.cur_nome, cur.cur_nome_abreviado,
@@ -5329,7 +5371,7 @@ BEGIN
          VALUES (Origem.cur_id, Origem.ent_id, Origem.tne_id, Origem.tme_id, Origem.cur_codigo,
                  Origem.cur_nome, Origem.cur_nome_abreviado,
                  Origem.cur_situacao, Origem.cur_dataCriacao, Origem.cur_dataAlteracao)
-    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 THEN
+    WHEN NOT MATCHED BY SOURCE AND Destino.cur_situacao <> 3 AND tme_id NOT IN (4,6,7,8) THEN
          UPDATE SET cur_situacao = 3,
                     cur_dataAlteracao = GETDATE();
     
@@ -5347,17 +5389,26 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_Curriculo', @SourceID, getdate());
     
+	PRINT 'Aca_CURRICULO';
+    
+	WITH CteCurriculo AS (
+		SELECT ac.* from GestaoAvaliacao_SGP..ACA_Curriculo ac   
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = ac.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    )
+	
     -- ACA_Curriculo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_Curriculo Destino
+    MERGE INTO CteCurriculo Destino
     USING (select crr.cur_id, crr.crr_id, crr.crr_nome, crr.crr_situacao, crr.crr_dataCriacao, crr.crr_dataAlteracao
              from GestaoPedagogica..ACA_Curriculo crr with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curso cur
                   on crr.cur_id = cur.cur_id
             where crr_situacao <> 3
               and ent_id = @ent_id
-              and cur_situacao <> 3) Origem
+              and cur_situacao <> 3
+			  and tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     WHEN MATCHED
@@ -5390,24 +5441,36 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'ACA_CurriculoPeriodo', @SourceID, getdate());
     
+	PRINT 'ACA_CurriculoPeriodo';
+    
+	WITH CteCurriculoPeriodo AS (
+		select crp.* from GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
+		inner join GestaoAvaliacao_SGP..ACA_Curriculo crr on crp.cur_id = crr.cur_id and crp.crr_id = crr.crr_id
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
+		WHERE c.tme_id NOT IN (4,6,7,8)
+    )
+	
     -- ACA_CurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..ACA_CurriculoPeriodo Destino
+    MERGE INTO CteCurriculoPeriodo Destino
     USING (select crp.cur_id, crp.crr_id, crp.crp_id, crp.crp_ordem, crp.crp_descricao, crp.crp_situacao,
                   crp.crp_dataCriacao, crp.crp_dataAlteracao, crp.tcp_id
              from GestaoPedagogica..ACA_CurriculoPeriodo crp with (nolock)
                   inner join GestaoAvaliacao_SGP..ACA_Curriculo crr
                    on crp.cur_id = crr.cur_id
                   and crp.crr_id = crr.crr_id
+				  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c WITH (NOLOCK) ON c.cur_id = crr.cur_id
                   left join GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo atcp
                    on crp.tcp_id = atcp.tcp_id
                   and 3 <> atcp.tcp_situacao
             where crp.crp_situacao <> 3
-              and crr.crr_situacao <> 3) Origem
+              and crr.crr_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)) Origem
      ON Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
+    AND Destino.tcp_id = Origem.tcp_id
     WHEN MATCHED
          AND ((Destino.crp_descricao COLLATE DATABASE_DEFAULT <> Origem.crp_descricao COLLATE DATABASE_DEFAULT)
                OR
@@ -5534,35 +5597,51 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate())
+         VALUES (@PackageLogID, 'TUR_TurmaCurriculo', @SourceID, getdate());
     
+	PRINT 'TUR_TurmaCurriculo';
+    
+	WITH CteTurmaCurriculo AS (
+		Select tc.* from GestaoAvaliacao_SGP..TUR_TurmaCurriculo tc
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tc.cur_id 
+		where c.tme_id NOT IN (4,6,7,8)
+	)
+	
     -- TUR_TurmaCurriculo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaCurriculo Destino
+    MERGE INTO CteTurmaCurriculo Destino
     USING (select tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
-                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao
+                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id
              from GestaoAvaliacao_SGP..TUR_Turma tur
-                  inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
+              inner join GestaoPedagogica..TUR_TurmaCurriculo tcr with (nolock)
                   on tur.tur_id = tcr.tur_id
-                  inner join GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
-                   on tcr.cur_id = crp.cur_id
-                  and tcr.crr_id = crp.crr_id
-                  and tcr.crp_id = crp.crp_id
+			  INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = tcr.cur_id
+              inner join GestaoPedagogica..ACA_CurriculoPeriodo crp1
+                    ON tcr.cur_id = crp1.cur_id
+                      and tcr.crr_id = crp1.crr_id
+                      and tcr.crp_id = crp1.crp_id
+              inner join GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp
+                    on tcr.cur_id = crp.cur_id
+                      and tcr.crr_id = crp.crr_id
+                      and tcr.crp_id = crp.crp_id
+                      and crp1.tcp_id = crp.tcp_id
             where tur.tur_situacao <> 3
               and tcr.tcr_situacao <> 3
               and crp.crp_situacao <> 3
+			  and c.tme_id NOT IN (4,6,7,8)
             group by tur.tur_id, tcr.cur_id, tcr.crr_id, tcr.crp_id, tcr.tcr_situacao,
-                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao) Origem
+                  tcr.tcr_dataCriacao, tcr.tcr_dataAlteracao, crp1.tcp_id) Origem
      ON Destino.tur_id = Origem.tur_id
     AND Destino.cur_id = Origem.cur_id
     AND Destino.crr_id = Origem.crr_id
     AND Destino.crp_id = Origem.crp_id
+    AND Destino.tcp_id = Origem.tcp_id
     WHEN MATCHED AND (Destino.tcr_situacao <> Origem.tcr_situacao) THEN
          UPDATE SET tcr_situacao = Origem.tcr_situacao,
                     tcr_dataAlteracao = Origem.tcr_dataAlteracao
     WHEN NOT MATCHED THEN
-         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_dataCriacao, tcr_dataAlteracao)
+         INSERT (tur_id, cur_id, crr_id, crp_id, tcr_situacao, tcr_dataCriacao, tcr_dataAlteracao, tcp_id)
          VALUES (Origem.tur_id, Origem.cur_id, Origem.crr_id, Origem.crp_id, Origem.tcr_situacao,
-                 Origem.tcr_dataCriacao, Origem.tcr_dataAlteracao)
+                 Origem.tcr_dataCriacao, Origem.tcr_dataAlteracao, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.tcr_situacao <> 3 THEN
          UPDATE SET tcr_situacao = 3,
                     tcr_dataAlteracao = GETDATE();
@@ -5631,13 +5710,22 @@ BEGIN
     SELECT @SourceID = NEWID()
     
     INSERT INTO PackageTaskLog (PackageLogID, SourceName, SourceID, StartDateTime)
-         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate())
+         VALUES (@PackageLogID, 'MTR_MatriculaTurma', @SourceID, getdate());
     
+	SELECT mtu.* INTO #TempMAtriculaTurma
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso c ON c.cur_id = mtu.cur_id
+	WHERE c.tme_id IN (4,6,7,8)
+	
+	DECLARE @DataAlteracaoMatriculaTurma DATETIME
+	SET @DataAlteracaoMatriculaTurma = GETDATE()
+
+	PRINT 'MTR_MatriculaTurma'
     -- MTR_MatriculaTurma
-    MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
+     MERGE INTO GestaoAvaliacao_SGP..MTR_MatriculaTurma Destino
     USING (select alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
                   mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada
-                 ,mtu.mtu_dataMatricula, mtu.mtu_dataSaida -- Add 07-06/16
+                 ,mtu.mtu_dataMatricula, mtu.mtu_dataSaida, crp.tcp_id -- Add 07-06/16
              from GestaoAvaliacao_SGP..ACA_Aluno alu
                   inner join GestaoPedagogica..MTR_MatriculaTurma mtu with (nolock)
                   on alu.alu_id = mtu.alu_id
@@ -5647,14 +5735,17 @@ BEGIN
                    on mtu.cur_id = crp.cur_id
                   and mtu.crr_id = crp.crr_id
                   and mtu.crp_id = crp.crp_id
+				  inner join GestaoAvaliacao_SGP..ACA_TipoCurriculoPeriodo tpcp
+				  on crp.tcp_id = tpcp.tcp_id
             where alu.alu_situacao = 1
               and mtu.mtu_situacao <> 3 -- Alterado de 1 para 3 - 07-06/16
               and tur.tur_situacao <> 3
               and crp.crp_situacao <> 3
+			  and tpcp.tcp_situacao <> 3
             group by alu.alu_id, mtu.mtu_id, tur.esc_id, tur.tur_id, mtu.cur_id, mtu.crr_id, mtu.crp_id,
-                  mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada,mtu.mtu_dataMatricula, mtu.mtu_dataSaida) Origem
+                  mtu.mtu_situacao, mtu.mtu_dataCriacao, mtu.mtu_dataAlteracao, mtu.mtu_numeroChamada,mtu.mtu_dataMatricula, mtu.mtu_dataSaida, crp.tcp_id) Origem
      ON Destino.alu_id = Origem.alu_id
-    AND Destino.mtu_id = Origem.mtu_id
+    AND Destino.mtu_id = Origem.mtu_id	
     WHEN MATCHED
          AND ((Destino.mtu_numeroChamada <> Origem.mtu_numeroChamada)
                OR
@@ -5667,14 +5758,21 @@ BEGIN
                     mtu_dataSaida	  = Origem.mtu_dataSaida	  --Add 07-06/16
     WHEN NOT MATCHED THEN
          INSERT (alu_id, mtu_id, esc_id, tur_id, cur_id, crr_id, crp_id,
-                 mtu_situacao, mtu_dataCriacao, mtu_dataAlteracao, mtu_numeroChamada,  mtu_dataMatricula, mtu_dataSaida)
+                 mtu_situacao, mtu_dataCriacao, mtu_dataAlteracao, mtu_numeroChamada,  mtu_dataMatricula, mtu_dataSaida, tcp_id)
          VALUES (Origem.alu_id, Origem.mtu_id, Origem.esc_id, Origem.tur_id, Origem.cur_id,
                  Origem.crr_id, Origem.crp_id, Origem.mtu_situacao,
-                 Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida)
+                 Origem.mtu_dataCriacao, Origem.mtu_dataAlteracao, Origem.mtu_numeroChamada,Origem.mtu_dataMatricula, Origem.mtu_dataSaida, Origem.tcp_id)
     WHEN NOT MATCHED BY SOURCE AND Destino.mtu_situacao <> 3 THEN
          UPDATE SET mtu_situacao = 3,
-                    mtu_dataAlteracao = GETDATE();
+                    mtu_dataAlteracao = @DataAlteracaoMatriculaTurma;
     
+	UPDATE mtu SET
+		mtu.mtu_situacao = temp.mtu_situacao, 
+		mtu.mtu_dataAlteracao = temp.mtu_dataAlteracao 
+	FROM GestaoAvaliacao_SGP..MTR_MatriculaTurma mtu
+	INNER JOIN #TempMAtriculaTurma temp ON mtu.alu_id = temp.alu_id AND  mtu.mtu_id = temp.mtu_id
+	WHERE mtu.mtu_situacao = 3 and mtu.mtu_dataAlteracao = @DataAlteracaoMatriculaTurma
+	
     IF @@ERROR <> 0
     BEGIN
        PRINT 'Erro na integração de dados na tabela MTR_MatriculaTurma'
@@ -5820,14 +5918,21 @@ BEGIN
          UPDATE SET tdt_situacao = 3,
                     tdt_dataAlteracao = GETDATE();
 
+	PRINT 'TUR_TurmaTipoCurriculoPeriodo';
+					
+	WITH CteTurmaTipoCurriculoPeriodo AS (
+		SELECT * FROM GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo
+		WHERE tme_id NOT IN (4,6,7,8)
+	)
+			
     -- TUR_TurmaTipoCurriculoPeriodo
-    MERGE INTO GestaoAvaliacao_SGP..TUR_TurmaTipoCurriculoPeriodo Destino
+    MERGE INTO CteTurmaTipoCurriculoPeriodo Destino
 	USING (SELECT t.tur_id, cur.cur_id, cur.tme_id, cur.tne_id, crp.crp_ordem, t.esc_id, cur.cur_situacao, t.tur_situacao, crp.crp_situacao, tcr.tcr_situacao
 		FROM GestaoAvaliacao_SGP..TUR_Turma t
 		INNER JOIN GestaoAvaliacao_SGP..TUR_TurmaCurriculo tcr ON t.tur_id = tcr.tur_id AND tcr.tcr_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_CurriculoPeriodo crp ON crp.cur_id = tcr.cur_id AND crp.crr_id = tcr.crr_id AND crp.crp_id = tcr.crp_id AND crp.crp_situacao = 1
 		INNER JOIN GestaoAvaliacao_SGP..ACA_Curso cur ON cur.cur_id = tcr.cur_id AND cur.cur_situacao = 1
-		where t.tur_situacao = 1) Origem
+		where t.tur_situacao = 1 AND cur.tme_id NOT IN (4,6,7,8)) Origem
 	ON Destino.tur_id = Origem.tur_id 
 		AND Destino.crp_ordem = Origem.crp_ordem
 		AND Destino.tne_id = Origem.tne_id
@@ -5884,7 +5989,7 @@ BEGIN
     COMMIT
 
     -- Cadastramento de usuários
-    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER
+    DECLARE @sis_id INT, @gru_idProfessor UNIQUEIDENTIFIER, @gru_idDiretor UNIQUEIDENTIFIER, @gru_idCoordenador UNIQUEIDENTIFIER, @gru_idAssistenteDiretor UNIQUEIDENTIFIER, @gru_idSupervisor UNIQUEIDENTIFIER
     DECLARE @TipoUAD table (tua_id UNIQUEIDENTIFIER)
     
 	INSERT INTO @TipoUAD
@@ -5898,11 +6003,23 @@ BEGIN
       uad_id UNIQUEIDENTIFIER)
     
     -- ID do sistema
-    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'
+    SELECT @sis_id = sis_id FROM CoreSSO..SYS_Sistema WITH (NOLOCK) WHERE sis_nome = 'SERAp'--204
 
 	SELECT @gru_idProfessor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
      WHERE gru.nomeUsadoIntegracao = 'Professor' and gru.sis_id = @sis_id
+
+	SELECT @gru_idCoordenador = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Coordenador Pedagógico' and gru.sis_id = @sis_id
+
+	SELECT @gru_idDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao = 'Diretor Escolar' and gru.sis_id = @sis_id
+
+	SELECT  @gru_idAssistenteDiretor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+     WHERE gru.nomeUsadoIntegracao='Assistente de Diretor na UE' and gru.sis_id = @sis_id
     
+	SELECT @gru_idSupervisor = gru.gru_idUsadoIntegracao FROM DEPARA_GRUPOS_INTEGRACAO gru
+	 WHERE gru.nomeUsadoIntegracao = 'Supervisão Escolar' and gru.sis_id = @sis_id
+
     IF @gru_idProfessor IS NOT NULL
     BEGIN
         -- insere na tmp_usuario
@@ -5967,7 +6084,48 @@ BEGIN
                                  group by prf.rf, gc.cd_escola) prof
                          where prof.rf = ds.cd_registro_funcional
                            and prof.cd_escola = cb.lotacao)
-                 group by ds.cd_registro_funcional, cb.lotacao) serv
+                  group by ds.cd_registro_funcional, cb.lotacao
+				 
+				 UNION ALL
+
+				 --Servidores que possuem cargo base de diretor ou coordenador pedagógio e não possuem cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						CRG.lotacao,
+						CASE crg.cd_cargo 
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+							WHEN 3352 THEN @gru_idSupervisor
+						END AS gru_id
+					FROM tmp_cargobase_mstech crg WITH (NOLOCK)
+						LEFT JOIN tmp_cargosobreposto_mstech cgs WITH (NOLOCK) ON crg.cd_cargo_base_servidor = cgs.cd_cargo_base_servidor
+						inner join GestaoPedagogica..RHU_Cargo WITH (NOLOCK) on crg.cd_cargo = RHU_Cargo.crg_codigo and isnull(crg.cd_situacao_funcional,1) = RHU_Cargo.tvi_id
+					WHERE 
+						cgs.cd_cargo IS NULL
+						AND RHU_Cargo.crg_situacao <> 3
+						AND crg.cd_cargo IN (3360, 3379, 3085, 3352) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor, 3352  Supervisor
+						AND CRG.lotacao IS NOT NULL
+					GROUP BY crg.cd_registro_funcional, crg.cd_cargo, CRG.lotacao
+
+					UNION ALL
+
+				--Servidores que passaram a ser coordenadores pedagógicos ou diretores através do cargo sobreposto
+					SELECT DISTINCT
+						crg.cd_registro_funcional rf ,
+						crs.cd_unidade_local_servico lotacao,
+						CASE crs.cd_cargo
+							WHEN 3360 THEN @gru_idDiretor 
+							WHEN 3379 THEN @gru_idCoordenador
+							WHEN 3085 THEN @gru_idAssistenteDiretor
+							WHEN 3352 THEN @gru_idSupervisor
+							END AS gru_id
+					FROM tmp_cargosobreposto_mstech crs WITH (NOLOCK)
+						INNER JOIN tmp_cargobase_mstech crg WITH (NOLOCK) ON crs.cd_cargo_base_servidor = crg.cd_cargo_base_servidor
+					WHERE 
+						crs.cd_cargo IN (3360, 3379, 3085, 3352) -- Diretor, Coordenador, 3182 Secretário, 3085 Assistente de Diretor, 3352  Supervisor
+					GROUP BY crs.cd_cargo_base_servidor,crg.cd_registro_funcional, crs.cd_cargo, crs.cd_unidade_local_servico
+                 ) serv
                INNER JOIN CoreSSO..SYS_Usuario usu WITH (NOLOCK)
                ON serv.rf = usu.usu_login
                INNER JOIN CoreSSO..SYS_UnidadeAdministrativa uad WITH (NOLOCK)
@@ -5984,18 +6142,18 @@ BEGIN
                       ON tmp.usu_id = usu.usu_id
                 GROUP BY usu.usu_id, usu.usu_login, tmp.gru_id, tmp.uad_id) AS _source
          ON  _source.usu_login = _target.ssi_login
-        AND _source.gru_id = _target.gru_id
-        AND _source.uad_id = _target.uad_id
-        AND _source.usu_id = _target.usu_id
+            AND _source.gru_id = _target.gru_id
+            AND _source.uad_id = _target.uad_id
+            AND _source.usu_id = _target.usu_id
         WHEN NOT MATCHED THEN
     	     INSERT (usu_id, ssi_login, gru_id, uad_id, ssi_situacao)
 	         VALUES (_source.usu_id, _source.usu_login, _source.gru_id, _source.uad_id, 1)
         WHEN MATCHED AND (_target.ssi_situacao = 3
-                     AND _target.gru_id = @gru_idProfessor
+                     AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)
                      AND _target.uad_id = _source.uad_id) THEN
              UPDATE SET ssi_situacao = 1,
                         ssi_dataAlteracao = GETDATE()
-        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id = @gru_idProfessor) THEN
+        WHEN NOT MATCHED BY SOURCE AND (_target.ssi_situacao = 1 AND _target.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)) THEN
 	         UPDATE SET ssi_situacao = 3,
                         ssi_dataAlteracao = GETDATE();
         
@@ -6006,9 +6164,17 @@ BEGIN
                INNER JOIN SSIS_LoginImportado lo
                 ON ug.usu_id = lo.usu_id
                AND ug.gru_id = lo.gru_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)
            AND lo.ssi_situacao = 3
         
+		----Remove os UsarioGrupo que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupo ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and ug.gru_id = us.gru_id)
+		
         MERGE CoreSSO..SYS_UsuarioGrupo AS _target
         USING (SELECT usu_id, gru_id
                  FROM #tmp_Usuario
@@ -6029,8 +6195,16 @@ BEGIN
                 ON ugu.usu_id = lo.usu_id
                AND ugu.gru_id = lo.gru_id
                AND ugu.uad_id = lo.uad_id
-         WHERE lo.gru_id = @gru_idProfessor
+         WHERE lo.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)
            AND lo.ssi_situacao = 3
+
+		--Remove os UsarioGrupoUA que não possuem mais acesso
+		DELETE ug
+			FROM CoreSSO..SYS_UsuarioGrupoUA ug
+            WHERE 
+				ug.gru_id IN (@gru_idProfessor, @gru_idDiretor, @gru_idCoordenador, @gru_idAssistenteDiretor, @gru_idSupervisor)
+			and NOT EXISTS (SELECT usu_id, gru_id
+                FROM #tmp_Usuario us WHERE us.usu_id = ug.usu_id and us.gru_id = ug.gru_id and us.uad_id =  ug.uad_id)
         
         -- Atualiza a tabela SSIS_RFImportado para inativar os registros que foram deletados em UsuarioGrupo
         MERGE CoreSSO..SYS_UsuarioGrupoUA AS _target
@@ -6520,7 +6694,7 @@ BEGIN
 				, ho_entrada
 				, ho_saida
 				, @ent_id AS ent_id
-				, 1 /* 1 – Tempo de aula */ AS trn_controleTempo
+				, 1 /* 1 - Tempo de aula */ AS trn_controleTempo
 				, 0 AS trn_padrao
 				, 1 AS tnr_situacao
 				, CONVERT(TIME, CONVERT(VARCHAR(4), (CASE WHEN CONVERT(INT, LEFT('0' + ho_entrada, 3)) > 23 THEN 23 ELSE CONVERT(INT, LEFT('0' + ho_entrada, 3)) END)) + ':' + CASE WHEN CONVERT(INT, RIGHT('0000' + ho_entrada, 2)) > 59 THEN '59' ELSE RIGHT('0000' + ho_entrada, 2) END) AS hr_entrada
@@ -8015,7 +8189,7 @@ END
 				, ho_entrada
 				, ho_saida
 				, @ent_id AS ent_id
-				, 2 /* 1 – Tempo de aula / 2 - Horas*/ AS trn_controleTempo
+				, 2 /* 1 - Tempo de aula / 2 - Horas*/ AS trn_controleTempo
 				, 0 AS trn_padrao
 				, 1 AS tnr_situacao
 				, CONVERT(TIME, CONVERT(VARCHAR(4), (CASE WHEN CONVERT(INT, LEFT('0' + ho_entrada, 3)) > 23 THEN 23 ELSE CONVERT(INT, LEFT('0' + ho_entrada, 3)) END)) + ':' + CASE WHEN CONVERT(INT, RIGHT('0000' + ho_entrada, 2)) > 59 THEN '59' ELSE RIGHT('0000' + ho_entrada, 2) END) AS hr_entrada
@@ -8037,7 +8211,7 @@ END
 				, ho_entrada
 				, ho_saida
 				, @ent_id AS ent_id
-				, 1 /* 1 – Tempo de aula / 2 - Horas*/ AS trn_controleTempo
+				, 1 /* 1 - Tempo de aula / 2 - Horas*/ AS trn_controleTempo
 				, 0 AS trn_padrao
 				, 1 AS tnr_situacao
 				, CONVERT(TIME, CONVERT(VARCHAR(4), (CASE WHEN CONVERT(INT, LEFT('0' + ho_entrada, 3)) > 23 THEN 23 ELSE CONVERT(INT, LEFT('0' + ho_entrada, 3)) END)) + ':' + CASE WHEN CONVERT(INT, RIGHT('0000' + ho_entrada, 2)) > 59 THEN '59' ELSE RIGHT('0000' + ho_entrada, 2) END) AS hr_entrada
@@ -18055,7 +18229,7 @@ BEGIN
                    ON RTRIM(LTRIM(setor.uad_codigo)) = ueg.cd_setor_distrito
                   AND setor.rowNum = 1
             WHERE ((dc_tipo_unidade_educacao = 'ESCOLA')
-                   -- filtro para pegar os “CEUs Puros”
+                   -- filtro para pegar os "CEUs Puros"
                    or (cd_unidade_educacao like '200%'
                        and dc_tipo_unidade_educacao = 'UNIDADE ADMINISTRATIVA'))
             GROUP BY cd_unidade_educacao, dc_tipo_unidade_educacao, nm_unidade_educacao, nm_logradouro,
@@ -18102,7 +18276,7 @@ BEGIN
     USING (select isnull(sg_tp_escola, 'CEU') sg_tp_escola
              from tmp_CoreSME_unidade_educacao_dados_gerais
             where ((dc_tipo_unidade_educacao = 'ESCOLA')
-                   -- filtro para pegar os “CEUs Puros”
+                   -- filtro para pegar os "CEUs Puros"
                    or (cd_unidade_educacao like '200%'
                        and dc_tipo_unidade_educacao = 'UNIDADE ADMINISTRATIVA'))
             group by isnull(sg_tp_escola, 'CEU')) AS _source
@@ -18118,7 +18292,7 @@ BEGIN
                   (select cd_unidade_educacao, isnull(sg_tp_escola, 'CEU') sg_tp_escola
                      from tmp_CoreSME_unidade_educacao_dados_gerais
                     where ((dc_tipo_unidade_educacao = 'ESCOLA')
-                          -- filtro para pegar os “CEUs Puros”
+                          -- filtro para pegar os "CEUs Puros"
                           or (cd_unidade_educacao like '200%'
                               and dc_tipo_unidade_educacao = 'UNIDADE ADMINISTRATIVA'))) dg
                   ON ua.uad_codigo = dg.cd_unidade_educacao
