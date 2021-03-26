@@ -12913,9 +12913,8 @@ BEGIN
                    prof.carga_horaria, dcc.cd_registro_funcional, prof.cd_cargo_base_servidor,
                    prof.cd_escola, dcc.origem, dcc.pwd, prof.cd_cargo, prof.dc_cargo,
                    dcc.cd_situacao_funcional, dcc.dc_situacao_funcional, dcc.pes_id, dcc.dt_inicio) dados
-    
-    MERGE INTO GE_RHU_ColaboradorCargo _target
-    USING (SELECT distinct
+
+    SELECT distinct
                   coc_id = CASE WHEN _main.coc_id IS NOT NULL THEN _main.coc_id
                                 WHEN _main.coc_id IS NULL
                                       and not exists (select coc_id from GestaoPedagogica..RHU_ColaboradorCargo coc
@@ -12928,7 +12927,7 @@ BEGIN
                                       where col_id = _main.col_id
                                         and crg_id = _main.crg_id) END,
                   _main.pes_id, _main.col_id, _main.crg_id, _main.uad_id, _main.ent_id, _main.chr_id,
-                  _main.coc_situacao, _main.coc_matricula, _main.coc_observacao, _main.coc_vigenciaInicio
+                  _main.coc_situacao, _main.coc_matricula, _main.coc_observacao, _main.coc_vigenciaInicio into #dadosCargoColaborador
              FROM (SELECT distinct tmp.pes_id, tmp.col_id, tmp.crg_id, tmp.uad_id, tmp.ent_id, tmp.chr_id,
                           tmp.coc_situacao coc_situacao, tmp.coc_matricula,
                           tmp.coc_observacao, tmp.lotacao, coc.coc_id, tmp.coc_vigenciaInicio,
@@ -12940,7 +12939,7 @@ BEGIN
                                   crg.lotacao as lotacao, crg.coc_vigenciaInicio, crg.cd_situacao_funcional
                              FROM (SELECT DISTINCT pes_id, cd_registro_funcional AS coc_matricula,
                                           (SELECT TOP 1 CAST(cd_lotacao_cl AS VARCHAR(2))
-                                             FROM tmp_GerenciamentoFrequencia_cargoBase base
+                                             FROM Manutencao..tmp_GerenciamentoFrequencia_cargoBase base
                                             WHERE base.cd_cargo_base_servidor = tmpcrg.cd_cargo_base_servidor
                                               AND base.cd_registro_funcional = tmpcrg.cd_registro_funcional) AS coc_observacao,
                                           cd_cargo, dc_cargo, lotacao, carga_horaria, 1 AS coc_situacao,
@@ -12948,29 +12947,27 @@ BEGIN
                                           ROW_NUMBER() OVER ( PARTITION BY pes_id ORDER BY origem DESC ) AS rowNum
                                      FROM (select cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   null AS carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem
-                                             from tmp_DiarioClasse_cargos
-											 inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = lotacao
-                                            WHERE lotacao IS NOT NULL
+                                             from Manutencao..tmp_DiarioClasse_cargos
+                                            WHERE lotacao IS NOT NULL 
                                             group by cd_registro_funcional, cd_cargo_base_servidor, lotacao, cd_cargo, dc_cargo,
                                                   dt_inicio, cd_situacao_funcional, pes_id, origem
                                            union all
                                            select cd_registro_funcional, dcc.cd_cargo_base_servidor, cd_escola as lotacao, cd_cargo,
                                                   dc_cargo, dcc.carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem
-                                             from tmp_DiarioClasse_cargos dcc
+                                             from Manutencao..tmp_DiarioClasse_cargos dcc
                                                   inner join BD_PRODAM..v_grade_curricular grd
                                                    on dcc.cd_registro_funcional = grd.rf
                                                   and dcc.cd_cargo_base_servidor = grd.cd_cargo_base_servidor
-												  inner join GestaoPedagogica..ESC_Escola esc on esc.esc_codigo = cd_escola
                                             WHERE dcc.lotacao IS NULL
                                             group by cd_registro_funcional, dcc.cd_cargo_base_servidor, cd_escola, cd_cargo,
                                                   dc_cargo, dcc.carga_horaria, dt_inicio, cd_situacao_funcional, pes_id, origem) tmpcrg) crg 
-                                  INNER JOIN GE_RHU_TipoVinculo tvi
+                                  INNER JOIN Manutencao..GE_RHU_TipoVinculo tvi
                                   ON tvi.tvi_codIntegracao = crg.cd_situacao_funcional
-                                  INNER JOIN GE_RHU_Cargo car
+                                  INNER JOIN Manutencao..GE_RHU_Cargo car
                                   ON car.crg_codigo = crg.cd_cargo AND (car.tvi_id = tvi.tvi_id or (tvi.tvi_codIntegracao = 99 and car.tvi_id = 1))
 								  INNER JOIN (select dcgc2.rf, dcgc2.cd_cargo_base_servidor, dcgc2.cd_escola  
-					                            from tmp_DiarioClasse_grade_curricular dcgc2  
-						 	                         inner join GE_ESC_Escola esc  
+					                            from Manutencao..tmp_DiarioClasse_grade_curricular dcgc2  
+						 	                         inner join Manutencao..GE_ESC_Escola esc  
 									                 on esc.esc_codigo = dcgc2.cd_escola  
 													 AND esc.esc_situacao <> 3
 					                           GROUP BY dcgc2.rf, dcgc2.cd_cargo_base_servidor, dcgc2.cd_escola) dcgc  
@@ -12978,19 +12975,19 @@ BEGIN
                                   AND crg.cd_cargo_base_servidor = dcgc.cd_cargo_base_servidor  
                                   AND (crg.lotacao = dcgc.cd_escola
                                        or crg.lotacao in (select cd_unidade_educacao from @dre))
-                                  INNER JOIN SSO_SYS_UnidadeAdministrativa uad
+                                  INNER JOIN Manutencao..SSO_SYS_UnidadeAdministrativa uad
                                    ON uad.uad_codigo = dcgc.cd_escola
                                   AND uad.ent_id = @ent_id_smesp
                                   INNER JOIN @TipoUAD tua
                                   ON uad.tua_id = tua.tua_id
-                                  INNER JOIN tmp_GerenciamentoFrequencia_cargoBase base
+                                  INNER JOIN Manutencao..tmp_GerenciamentoFrequencia_cargoBase base
                                    ON crg.cd_cargo = base.cd_cargo
                                   AND crg.coc_matricula = base.cd_registro_funcional
                                   AND crg.cd_cargo_base_servidor = base.cd_cargo_base_servidor
                                   AND CAST(crg.coc_observacao AS VARCHAR(2)) = CAST(base.cd_lotacao_cl AS VARCHAR(2))
-                                  INNER JOIN GE_RHU_Colaborador col
+                                  INNER JOIN Manutencao..GE_RHU_Colaborador col
                                   ON col.pes_id = crg.pes_id
-                                  LEFT JOIN GE_RHU_CargaHoraria chr
+                                  LEFT JOIN Manutencao..GE_RHU_CargaHoraria chr
                                    ON crg.carga_horaria * 60 = chr.chr_horasAula
                                   AND car.crg_id = chr.crg_id
                             WHERE uad.uad_situacao = 1
@@ -13000,7 +12997,7 @@ BEGIN
                             GROUP BY crg.pes_id, car.crg_id, uad.uad_id, uad.ent_id, col.col_id, chr.chr_id,
                                   crg.coc_situacao, crg.coc_matricula, crg.coc_observacao, crg.lotacao,
                                   crg.coc_vigenciaInicio, crg.cd_situacao_funcional) AS tmp
-                          LEFT JOIN GE_RHU_ColaboradorCargo coc
+                          LEFT JOIN Manutencao..GE_RHU_ColaboradorCargo coc
                            ON coc.col_id = tmp.col_id
                           AND coc.crg_id = tmp.crg_id
                           AND (coc.coc_observacao = tmp.coc_observacao or coc.coc_observacao is null)
@@ -13010,7 +13007,19 @@ BEGIN
                           AND (coc.coc_vigenciaInicio = tmp.coc_vigenciaInicio or tmp.cd_situacao_funcional = 99) --adicionado pois nos casos de origem=2, o inicio da vigencia vem = getdate, portanto ele estava duplicando, criando um registro pra cada dia
                           AND coc.coc_situacao <> 3
                           LEFT JOIN @dre dre
-                          ON dre.cd_unidade_educacao = tmp.lotacao)AS _main) AS _source	
+                          ON dre.cd_unidade_educacao = tmp.lotacao)AS _main
+    
+	select 
+		coc_id,pes_id, col_id, crg_id, uad_id, ent_id, chr_id,
+		  coc_situacao, coc_matricula, coc_observacao, coc_vigenciaInicio,
+		  ROW_NUMBER() OVER(PARTITION BY coc_id, col_id, crg_id
+			ORDER BY coc_vigenciaInicio DESC) AS rowNum Into #dadosCargoColaboradorOrdenado
+	from #dadosCargoColaborador _main   
+    
+    MERGE INTO GE_RHU_ColaboradorCargo _target
+    USING (select coc_id,pes_id, col_id, crg_id, uad_id, ent_id, chr_id,
+      coc_situacao, coc_matricula, coc_observacao, coc_vigenciaInicio, rowNum from #dadosCargoColaboradorOrdenado
+		where rowNum=1) AS _source	
      ON _source.col_id = _target.col_id
     AND _source.crg_id = _target.crg_id
     AND _source.coc_id = _target.coc_id
