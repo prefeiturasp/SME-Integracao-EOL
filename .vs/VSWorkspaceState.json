@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\integracao",
-    "\\integracao\\src"
+    "\\integracao\\src",
+    "\\integracao\\src\\IntegracaoCompleta2019"
   ],
-  "SelectedNode": "\\integracao\\src\\ImportacaoSMESP.sln",
+  "SelectedNode": "\\integracao\\src",
   "PreviewInSolutionExplorer": false
 }
