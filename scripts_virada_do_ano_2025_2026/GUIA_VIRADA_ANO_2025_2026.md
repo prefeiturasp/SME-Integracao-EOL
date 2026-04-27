@@ -266,13 +266,13 @@ select distinct cur_id, crr_id, tur.esc_id, uni_id, 1 as ces_id, '2026-01-01' as
 **Alterar de:**
 
 ```sql
-'2025-12-20' as tte_vigenciaFim
+'2024-12-20' as tte_vigenciaFim
 ```
 
 **Para:**
 
 ```sql
-'2026-12-20' as tte_vigenciaFim
+'2025-12-20' as tte_vigenciaFim
 ```
 
 **Contexto do código:**
@@ -281,7 +281,7 @@ select distinct cur_id, crr_id, tur.esc_id, uni_id, 1 as ces_id, '2026-01-01' as
 insert into GestaoPedagogica..TUR_TurmaDisciplinaTerritorio
 (tud_idExperiencia, tud_idTerritorio, tte_vigenciaInicio, tte_vigenciaFim, tte_situacao, tte_dataCriacao, tte_dataAlteracao)
 select tudExp.tud_id as tud_idExperiencia, tudTer.tud_id as tud_idTerritorio,
-       GETDATE() as tte_vigenciaInicio, '2026-12-20' as tte_vigenciaFim,
+       GETDATE() as tte_vigenciaInicio, '2025-12-20' as tte_vigenciaFim,
        1 as tte_situacao, GETDATE() as tte_dataCriacao, GETDATE() as tte_dataAlteracao
 ```
 
