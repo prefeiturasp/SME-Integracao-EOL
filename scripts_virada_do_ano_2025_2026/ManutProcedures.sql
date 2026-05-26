@@ -12702,8 +12702,8 @@ BEGIN
                              (SELECT t.cd_turma_escola
                                 FROM (SELECT tal.cd_turma_escola
                                         FROM BD_PRODAM..v_turma_MSTECH tal
-                                             INNER JOIN tmpTipoSerieEOL tse
-                                             ON tse.cd_serie_eol98 = tal.cd_serie_eol98
+                                            --  INNER JOIN tmpTipoSerieEOL tse
+                                            --  ON tse.cd_serie_eol98 = tal.cd_serie_eol98
                                              INNER JOIN GE_ESC_Escola esc on esc.esc_codigo = tal.cd_escola
 											 AND esc.esc_situacao <> 3
 											 LEFT JOIN EscolasComEJA eja on eja.esc_id = esc.esc_id
@@ -12767,8 +12767,8 @@ BEGIN
                              (SELECT t.cd_turma_escola
                                 FROM (SELECT tal.cd_turma_escola
                                         FROM BD_PRODAM..v_turma_MSTECH tal
-                                             INNER JOIN tmpTipoSerieEOL tse
-                                             ON tse.cd_serie_eol98 = tal.cd_serie_eol98
+                                            --  INNER JOIN tmpTipoSerieEOL tse
+                                            --  ON tse.cd_serie_eol98 = tal.cd_serie_eol98
                                        WHERE tal.an_letivo = (SELECT CAST(VALOR as int) FROM _PARAMETROS WHERE CHAVE = 'ANO_BASE')
                                          AND tal.dc_etapa_ensino IS NOT NULL
                                          AND tal.cd_modalidade_ensino IS NOT NULL
@@ -16964,8 +16964,8 @@ select cl_codigo, cl_alu_codigo, cl_tur_codigo, cl_datst, cl_cham, des_status, c
   from BD_PRODAM..v_alunos_turma_matriculados_historico_movimentacao hm inner join
        BD_PRODAM..v_turma_MSTECH tur
        on cl_tur_codigo = cd_turma_escola
-	   INNER JOIN tmpTipoSerieEOL AS serie -- ADD em 13/09 Alunos "transferidos" para o EJA, continuavam ativos no SGP 
-			   ON serie.cd_serie_eol98 = tur.cd_serie_eol98 -- E-mail: Atualização SGP - EMEF Josefa Nicácio - fgonsales@PREFEITURA.SP.GOV.BR>
+	  --  INNER JOIN tmpTipoSerieEOL AS serie -- ADD em 13/09 Alunos "transferidos" para o EJA, continuavam ativos no SGP 
+		-- 	   ON serie.cd_serie_eol98 = tur.cd_serie_eol98 -- E-mail: Atualização SGP - EMEF Josefa Nicácio - fgonsales@PREFEITURA.SP.GOV.BR>
  where tur.cd_tipo_turma = 1
    AND tur.cd_etapa_ensino IN (1,2,3,4,5,6,9,10,11,13,14) --filtrar apenas os cursos tratados pela integração
    AND tur.an_letivo = (select VALOR from _PARAMETROS where CHAVE = 'ANO_BASE')
@@ -17197,8 +17197,8 @@ SELECT cd_escola, cd_turma_escola, tne_nome, tme_nome, cur_codigo,
 										   AND esc.esc_situacao <> 3
 										   --and esc.esc_controleSistema = 1 --filtro para funcionar com menos escolas em homologação
 																			 -- mas teve q ser comentado em 28/04/2016 por causa dos CIEJAS
-               INNER JOIN tmpTipoSerieEOL tse
-               ON tse.cd_serie_eol98 = tal.cd_serie_eol98
+              --  INNER JOIN tmpTipoSerieEOL tse
+              --  ON tse.cd_serie_eol98 = tal.cd_serie_eol98
          WHERE tal.an_letivo = (SELECT CAST(VALOR as int) FROM _PARAMETROS WHERE CHAVE = 'ANO_BASE')
            AND tal.dc_etapa_ensino IS NOT NULL
            AND tal.cd_etapa_ensino IN (1,2,3,4,5,6,9,10,11,13,14) --filtrar alunos de EF (Regular e Especial) e EI (Regular e Especial)
